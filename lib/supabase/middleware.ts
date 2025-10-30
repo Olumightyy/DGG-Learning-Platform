@@ -58,9 +58,44 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (request.nextUrl.pathname !== "/" && !user && !request.nextUrl.pathname.startsWith("/auth")) {
+  const path = request.nextUrl.pathname
+
+  // Public routes that don't need authentication
+  const publicRoutes = [
+    '/',
+    '/auth/login',
+    '/auth/signup',
+    '/auth/callback',
+    '/auth/confirm',
+  ]
+
+  // Check if current path is public
+  const isPublicRoute = publicRoutes.some(route => path.startsWith(route))
+
+  // Protected routes that need authentication
+  const protectedRoutes = [
+    '/student',
+    '/instructor',
+    '/api',
+  ]
+
+  // Check if current path is protected
+  const isProtectedRoute = protectedRoutes.some(route => path.startsWith(route))
+
+  // If user is NOT logged in and trying to access protected route
+  if (!user && isProtectedRoute) {
     const url = request.nextUrl.clone()
-    url.pathname = "/auth/login"
+    url.pathname = '/auth/login'
+    url.searchParams.set('redirectTo', path) // Save where they were trying to go
+    return NextResponse.redirect(url)
+  }
+
+  // If user IS logged in and trying to access auth pages, redirect to their dashboard
+  if (user && path.startsWith('/auth')) {
+    // You'll need to check user role here if you want role-based redirects
+    // For now, just redirect to a default page
+    const url = request.nextUrl.clone()
+    url.pathname = '/student/dashboard' // or determine based on user role
     return NextResponse.redirect(url)
   }
 
