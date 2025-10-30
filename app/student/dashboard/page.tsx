@@ -11,16 +11,20 @@ export default async function StudentDashboard() {
   if (!user) return null
 
   // Fetch enrolled materials
-  const { data: enrollments } = await supabase
+  const { data: enrollments, error: enrollmentsError } = await supabase
     .from("enrollments")
     .select("material_id, materials(id, title, description)")
     .eq("student_id", user.id)
+
+  if (enrollmentsError) {
+    console.error("Error fetching enrollments:", enrollmentsError)
+  }
 
   // Get list of enrolled material IDs
   const enrolledMaterialIds = enrollments?.map((e) => e.material_id) || []
 
   // Fetch assignments for enrolled materials OR public materials
-  const { data: assignments } = await supabase
+  const { data: assignments, error: assignmentsError } = await supabase
     .from("assignments")
     .select(`
       id, 
@@ -30,20 +34,28 @@ export default async function StudentDashboard() {
       material_id,
       materials(id, title, is_public)
     `)
+    .in("material_id", enrolledMaterialIds.length > 0 ? enrolledMaterialIds : ["00000000-0000-0000-0000-000000000000"])
     .order("due_date", { ascending: true })
 
+  if (assignmentsError) {
+    console.error("Error fetching assignments:", assignmentsError)
+  }
+
   // Filter assignments: show only if student is enrolled OR material is public
-  const visibleAssignments = assignments?.filter(
-    (assignment) =>
-      enrolledMaterialIds.includes(assignment.material_id) ||
-      assignment.materials?.is_public === true
-  ) || []
+  const visibleAssignments =
+    assignments?.filter(
+      (assignment) => enrolledMaterialIds.includes(assignment.material_id) || assignment.materials?.is_public === true,
+    ) || []
 
   // Fetch submissions
-  const { data: submissions } = await supabase
+  const { data: submissions, error: submissionsError } = await supabase
     .from("submissions")
     .select("assignment_id, score, submitted_at")
     .eq("student_id", user.id)
+
+  if (submissionsError) {
+    console.error("Error fetching submissions:", submissionsError)
+  }
 
   const submissionMap = new Map(submissions?.map((s) => [s.assignment_id, s]) || [])
 
@@ -110,9 +122,7 @@ export default async function StudentDashboard() {
                               {assignment.materials?.title}
                             </span>
                             {isPublicMaterial && !isEnrolled && (
-                              <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">
-                                Public Course
-                              </span>
+                              <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">Public Course</span>
                             )}
                           </div>
                         </div>
@@ -131,7 +141,8 @@ export default async function StudentDashboard() {
                       </div>
                       {dueDate && (
                         <p className="text-sm text-gray-500 mt-2">
-                          Due: {dueDate.toLocaleDateString()} at {dueDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          Due: {dueDate.toLocaleDateString()} at{" "}
+                          {dueDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                         </p>
                       )}
                     </CardHeader>
@@ -145,9 +156,7 @@ export default async function StudentDashboard() {
             <CardContent className="pt-6">
               <p className="text-gray-600">No assignments available yet.</p>
               {enrollments && enrollments.length === 0 && (
-                <p className="text-sm text-gray-500 mt-2">
-                  Enroll in courses to see assignments!
-                </p>
+                <p className="text-sm text-gray-500 mt-2">Enroll in courses to see assignments!</p>
               )}
             </CardContent>
           </Card>
