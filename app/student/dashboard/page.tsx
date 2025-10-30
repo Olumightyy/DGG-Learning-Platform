@@ -14,35 +14,40 @@ export default async function StudentDashboard() {
   }
 
   // Fetch enrolled materials
-  const { data: enrollments, error: enrollError } = await supabase
+  const { data: enrollments } = await supabase
     .from("enrollments")
-    .select("material_id, materials(id, title, description)")
+    .select(`
+      material_id,
+      materials:material_id (
+        id,
+        title,
+        description
+      )
+    `)
     .eq("student_id", user.id)
 
-  console.log("Enrollments:", enrollments)
-  console.log("Enroll Error:", enrollError)
-
-  // Get list of enrolled material IDs
+  // Get enrolled material IDs
   const enrolledMaterialIds = enrollments?.map((e) => e.material_id) || []
 
-  // Fetch assignments for enrolled materials OR public materials
-  const { data: assignments, error: assignError } = await supabase
+  // Fetch ALL assignments with material info
+  const { data: allAssignments } = await supabase
     .from("assignments")
     .select(`
-      id, 
-      title, 
-      description, 
-      due_date, 
+      id,
+      title,
+      description,
+      due_date,
       material_id,
-      materials(id, title, is_public)
+      materials:material_id (
+        id,
+        title,
+        is_public
+      )
     `)
-    .order("due_date", { ascending: true })
+    .order("created_at", { ascending: false })
 
-  console.log("Assignments:", assignments)
-  console.log("Assign Error:", assignError)
-
-  // Filter assignments: show only if student is enrolled OR material is public
-  const visibleAssignments = assignments?.filter(
+  // Filter visible assignments
+  const visibleAssignments = allAssignments?.filter(
     (assignment) =>
       enrolledMaterialIds.includes(assignment.material_id) ||
       assignment.materials?.is_public === true
@@ -59,21 +64,29 @@ export default async function StudentDashboard() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Welcome to Your Dashboard</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Welcome Back!</h1>
         <p className="text-gray-600 mt-2">Manage your learning materials and assignments</p>
       </div>
 
-      {/* Enrolled Materials Section */}
+      {/* Enrolled Materials */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Your Materials</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold text-gray-900">Your Materials</h2>
+          <Link href="/student/explore">
+            <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+              Explore Courses
+            </button>
+          </Link>
+        </div>
+        
         {enrollments && enrollments.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {enrollments.map((enrollment) => (
+            {enrollments.map((enrollment: any) => (
               <Link key={enrollment.material_id} href={`/student/materials/${enrollment.material_id}`}>
                 <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
                   <CardHeader>
-                    <CardTitle className="text-lg">{enrollment.materials?.title}</CardTitle>
-                    <CardDescription>{enrollment.materials?.description}</CardDescription>
+                    <CardTitle className="text-lg">{enrollment.materials?.title || "Untitled"}</CardTitle>
+                    <CardDescription>{enrollment.materials?.description || "No description"}</CardDescription>
                   </CardHeader>
                 </Card>
               </Link>
@@ -81,30 +94,28 @@ export default async function StudentDashboard() {
           </div>
         ) : (
           <Card>
-            <CardContent className="pt-6">
-              <p className="text-gray-600">
-                You are not enrolled in any materials yet.{" "}
-                <Link href="/student/explore" className="text-blue-600 hover:underline">
-                  Explore courses
-                </Link>
-              </p>
+            <CardContent className="pt-6 text-center">
+              <p className="text-gray-600 mb-4">You haven't enrolled in any courses yet.</p>
+              <Link href="/student/explore">
+                <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                  Browse Courses
+                </button>
+              </Link>
             </CardContent>
           </Card>
         )}
       </div>
 
-      {/* Assignments Section */}
+      {/* Assignments */}
       <div>
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Your Assignments</h2>
         {visibleAssignments && visibleAssignments.length > 0 ? (
           <div className="space-y-4">
-            {visibleAssignments.map((assignment) => {
+            {visibleAssignments.map((assignment: any) => {
               const submission = submissionMap.get(assignment.id)
               const isSubmitted = !!submission
               const dueDate = assignment.due_date ? new Date(assignment.due_date) : null
               const isOverdue = dueDate && dueDate < new Date() && !isSubmitted
-              const isPublicMaterial = assignment.materials?.is_public === true
-              const isEnrolled = enrolledMaterialIds.includes(assignment.material_id)
 
               return (
                 <Link key={assignment.id} href={`/student/assignments/${assignment.id}`}>
@@ -114,25 +125,22 @@ export default async function StudentDashboard() {
                         <div className="flex-1">
                           <CardTitle>{assignment.title}</CardTitle>
                           <CardDescription>{assignment.description}</CardDescription>
-                          <div className="flex gap-2 mt-2">
+                          <div className="mt-2">
                             <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
-                              {assignment.materials?.title}
+                              {assignment.materials?.title || "Unknown Course"}
                             </span>
-                            {isPublicMaterial && !isEnrolled && (
-                              <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">
-                                Public Course
-                              </span>
-                            )}
                           </div>
                         </div>
                         <div className="text-right ml-4">
                           {isSubmitted ? (
                             <div className="text-sm">
-                              <p className="text-green-600 font-semibold">Submitted</p>
-                              {submission.score !== null && <p className="text-gray-600">Score: {submission.score}</p>}
+                              <p className="text-green-600 font-semibold">✓ Submitted</p>
+                              {submission.score !== null && (
+                                <p className="text-gray-600">Score: {submission.score}</p>
+                              )}
                             </div>
                           ) : isOverdue ? (
-                            <p className="text-red-600 font-semibold text-sm">Overdue</p>
+                            <p className="text-red-600 font-semibold text-sm">⚠ Overdue</p>
                           ) : (
                             <p className="text-blue-600 font-semibold text-sm">Pending</p>
                           )}
@@ -140,7 +148,7 @@ export default async function StudentDashboard() {
                       </div>
                       {dueDate && (
                         <p className="text-sm text-gray-500 mt-2">
-                          Due: {dueDate.toLocaleDateString()} at {dueDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          Due: {dueDate.toLocaleDateString()}
                         </p>
                       )}
                     </CardHeader>
@@ -151,13 +159,8 @@ export default async function StudentDashboard() {
           </div>
         ) : (
           <Card>
-            <CardContent className="pt-6">
+            <CardContent className="pt-6 text-center">
               <p className="text-gray-600">No assignments available yet.</p>
-              {enrollments && enrollments.length === 0 && (
-                <p className="text-sm text-gray-500 mt-2">
-                  Enroll in courses to see assignments!
-                </p>
-              )}
             </CardContent>
           </Card>
         )}
