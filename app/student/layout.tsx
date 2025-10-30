@@ -18,18 +18,9 @@ export default async function StudentLayout({
     redirect("/auth/login")
   }
 
-  const { data: profile, error: profileError } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single()
+  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single()
 
-  if (profileError || !profile) {
-    console.error("Error fetching profile:", profileError)
-    redirect("/auth/login")
-  }
-
-  if (profile.role !== "student") {
+  if (profile?.role !== "student") {
     redirect("/instructor/dashboard")
   }
 
