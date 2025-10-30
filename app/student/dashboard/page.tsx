@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 
 export default async function StudentDashboard() {
   const supabase = await createClient()
@@ -8,19 +9,24 @@ export default async function StudentDashboard() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) return null
+  if (!user) {
+    redirect("/auth/login")
+  }
 
   // Fetch enrolled materials
-  const { data: enrollments } = await supabase
+  const { data: enrollments, error: enrollError } = await supabase
     .from("enrollments")
     .select("material_id, materials(id, title, description)")
     .eq("student_id", user.id)
+
+  console.log("Enrollments:", enrollments)
+  console.log("Enroll Error:", enrollError)
 
   // Get list of enrolled material IDs
   const enrolledMaterialIds = enrollments?.map((e) => e.material_id) || []
 
   // Fetch assignments for enrolled materials OR public materials
-  const { data: assignments } = await supabase
+  const { data: assignments, error: assignError } = await supabase
     .from("assignments")
     .select(`
       id, 
@@ -31,6 +37,9 @@ export default async function StudentDashboard() {
       materials(id, title, is_public)
     `)
     .order("due_date", { ascending: true })
+
+  console.log("Assignments:", assignments)
+  console.log("Assign Error:", assignError)
 
   // Filter assignments: show only if student is enrolled OR material is public
   const visibleAssignments = assignments?.filter(
