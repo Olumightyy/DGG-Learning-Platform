@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 
 export default async function InstructorDashboard() {
   const supabase = await createClient()
@@ -9,130 +9,193 @@ export default async function InstructorDashboard() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) return null
+  if (!user) {
+    redirect("/auth/login")
+  }
 
   // Fetch instructor's materials
   const { data: materials } = await supabase
     .from("materials")
-    .select("id, title, description, created_at")
+    .select("id, title, description, is_public, created_at")
     .eq("instructor_id", user.id)
     .order("created_at", { ascending: false })
 
   // Fetch instructor's assignments
   const { data: assignments } = await supabase
     .from("assignments")
-    .select("id, title, due_date")
+    .select(`
+      id,
+      title,
+      description,
+      due_date,
+      material_id,
+      materials:material_id (
+        title
+      )
+    `)
     .eq("instructor_id", user.id)
-    .order("due_date", { ascending: true })
+    .order("created_at", { ascending: false })
 
-  // Count submissions
-  const { data: submissions } = await supabase
+  // Fetch total enrollments across all materials
+  const { data: enrollments, count: totalEnrollments } = await supabase
+    .from("enrollments")
+    .select("id", { count: "exact" })
+    .in("material_id", materials?.map((m) => m.id) || [])
+
+  // Fetch pending submissions
+  const { data: submissions, count: pendingCount } = await supabase
     .from("submissions")
-    .select("id, assignment_id, score")
+    .select("id", { count: "exact" })
     .in("assignment_id", assignments?.map((a) => a.id) || [])
-
-  const submissionsByAssignment = new Map<string, { total: number; graded: number }>()
-  assignments?.forEach((a) => {
-    submissionsByAssignment.set(a.id, { total: 0, graded: 0 })
-  })
-
-  submissions?.forEach((s) => {
-    const current = submissionsByAssignment.get(s.assignment_id) || { total: 0, graded: 0 }
-    current.total++
-    if (s.score !== null) current.graded++
-    submissionsByAssignment.set(s.assignment_id, current)
-  })
+    .is("score", null)
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-between items-start">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Instructor Dashboard</h1>
-          <p className="text-gray-600 mt-2">Manage your materials and assignments</p>
-        </div>
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900">Instructor Dashboard</h1>
+        <p className="text-gray-600 mt-2">Manage your courses, assignments, and students</p>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm font-medium text-gray-600">Total Courses</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-bold">{materials?.length || 0}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm font-medium text-gray-600">Total Assignments</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-bold">{assignments?.length || 0}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm font-medium text-gray-600">Total Students</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-bold">{totalEnrollments || 0}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm font-medium text-gray-600">Pending Reviews</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-3xl font-bold text-orange-600">{pendingCount || 0}</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Link href="/instructor/materials/new">
-          <Button>Create Material</Button>
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer bg-blue-50 border-blue-200">
+            <CardHeader>
+              <CardTitle className="text-blue-900">+ Create New Course</CardTitle>
+              <CardDescription>Add learning materials for students</CardDescription>
+            </CardHeader>
+          </Card>
+        </Link>
+        <Link href="/instructor/assignments/new">
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer bg-green-50 border-green-200">
+            <CardHeader>
+              <CardTitle className="text-green-900">+ Create Assignment</CardTitle>
+              <CardDescription>Assign tasks to your students</CardDescription>
+            </CardHeader>
+          </Card>
+        </Link>
+        <Link href="/instructor/materials">
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer bg-purple-50 border-purple-200">
+            <CardHeader>
+              <CardTitle className="text-purple-900">View All Courses</CardTitle>
+              <CardDescription>Manage existing courses</CardDescription>
+            </CardHeader>
+          </Card>
         </Link>
       </div>
 
-      {/* Materials Section */}
+      {/* Recent Materials */}
       <div>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-gray-900">Your Materials</h2>
-          <Link href="/instructor/materials/new">
-            <Button variant="outline" size="sm">
-              + New Material
-            </Button>
+          <h2 className="text-2xl font-bold text-gray-900">Your Courses</h2>
+          <Link href="/instructor/materials">
+            <button className="text-blue-600 hover:underline">View All →</button>
           </Link>
         </div>
         {materials && materials.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {materials.map((material) => (
+            {materials.slice(0, 6).map((material) => (
               <Link key={material.id} href={`/instructor/materials/${material.id}`}>
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
                   <CardHeader>
-                    <CardTitle className="text-lg">{material.title}</CardTitle>
+                    <div className="flex justify-between items-start">
+                      <CardTitle className="text-lg">{material.title}</CardTitle>
+                      {material.is_public && (
+                        <span className="text-xs px-2 py-1 bg-green-100 text-green-800 rounded">
+                          Public
+                        </span>
+                      )}
+                    </div>
                     <CardDescription>{material.description}</CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <p className="text-xs text-gray-500">
-                      Created: {new Date(material.created_at).toLocaleDateString()}
-                    </p>
-                  </CardContent>
                 </Card>
               </Link>
             ))}
           </div>
         ) : (
           <Card>
-            <CardContent className="pt-6">
-              <p className="text-gray-600">You haven&apos;t created any materials yet.</p>
+            <CardContent className="pt-6 text-center">
+              <p className="text-gray-600 mb-4">You haven't created any courses yet.</p>
+              <Link href="/instructor/materials/new">
+                <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                  Create Your First Course
+                </button>
+              </Link>
             </CardContent>
           </Card>
         )}
       </div>
 
-      {/* Assignments Section */}
+      {/* Recent Assignments */}
       <div>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-gray-900">Your Assignments</h2>
-          <Link href="/instructor/assignments/new">
-            <Button variant="outline" size="sm">
-              + New Assignment
-            </Button>
-          </Link>
+          <h2 className="text-2xl font-bold text-gray-900">Recent Assignments</h2>
         </div>
         {assignments && assignments.length > 0 ? (
           <div className="space-y-4">
-            {assignments.map((assignment) => {
-              const stats = submissionsByAssignment.get(assignment.id) || { total: 0, graded: 0 }
-              const dueDate = assignment.due_date ? new Date(assignment.due_date) : null
-
-              return (
-                <Link key={assignment.id} href={`/instructor/assignments/${assignment.id}`}>
-                  <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                    <CardHeader>
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <CardTitle>{assignment.title}</CardTitle>
-                          {dueDate && <p className="text-sm text-gray-500 mt-1">Due: {dueDate.toLocaleDateString()}</p>}
-                        </div>
-                        <div className="text-right">
-                          <p className="text-sm text-gray-600">
-                            {stats.graded}/{stats.total} graded
-                          </p>
-                        </div>
+            {assignments.slice(0, 5).map((assignment: any) => (
+              <Link key={assignment.id} href={`/instructor/assignments/${assignment.id}`}>
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                  <CardHeader>
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <CardTitle>{assignment.title}</CardTitle>
+                        <CardDescription>{assignment.description}</CardDescription>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Course: {assignment.materials?.title || "Unknown"}
+                        </p>
                       </div>
-                    </CardHeader>
-                  </Card>
-                </Link>
-              )
-            })}
+                      {assignment.due_date && (
+                        <p className="text-sm text-gray-600">
+                          Due: {new Date(assignment.due_date).toLocaleDateString()}
+                        </p>
+                      )}
+                    </div>
+                  </CardHeader>
+                </Card>
+              </Link>
+            ))}
           </div>
         ) : (
           <Card>
-            <CardContent className="pt-6">
-              <p className="text-gray-600">You haven&apos;t created any assignments yet.</p>
+            <CardContent className="pt-6 text-center">
+              <p className="text-gray-600">No assignments created yet.</p>
             </CardContent>
           </Card>
         )}
