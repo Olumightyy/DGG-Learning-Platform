@@ -250,4 +250,4 @@ export default function AssignmentPage() {
               <input
                 type="file"
                 onChange={handleFileChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none 
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
