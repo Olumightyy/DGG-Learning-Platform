@@ -3,9 +3,7 @@ import { NextResponse, type NextRequest } from "next/server"
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
+    request,
   })
 
   const supabase = createServerClient(
@@ -17,86 +15,44 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.get(name)?.value
         },
         set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          })
+          request.cookies.set({ name, value, ...options })
+          response.cookies.set({ name, value, ...options })
         },
         remove(name: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value: "",
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value: "",
-            ...options,
-          })
+          request.cookies.set({ name, value: "", ...options })
+          response.cookies.set({ name, value: "", ...options })
         },
       },
     },
   )
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // Refresh session
+  const { data: { user } } = await supabase.auth.getUser()
 
   const path = request.nextUrl.pathname
 
-  // Public routes that don't need authentication
-  const publicRoutes = [
-    '/',
-    '/auth/login',
-    '/auth/signup',
-    '/auth/callback',
-    '/auth/confirm',
-  ]
+  // Public paths
+  const publicPaths = ['/', '/auth/login', '/auth/signup', '/auth/callback', '/auth/confirm', '/auth/reset-password']
+  const isPublicPath = publicPaths.some(p => path === p || path.startsWith(p))
 
-  // Check if current path is public
-  const isPublicRoute = publicRoutes.some(route => path.startsWith(route))
+  // Protected paths
+  const protectedPaths = ['/student', '/instructor', '/api']
+  const isProtectedPath = protectedPaths.some(p => path.startsWith(p))
 
-  // Protected routes that need authentication
-  const protectedRoutes = [
-    '/student',
-    '/instructor',
-    '/api',
-  ]
-
-  // Check if current path is protected
-  const isProtectedRoute = protectedRoutes.some(route => path.startsWith(route))
-
-  // If user is NOT logged in and trying to access protected route
-  if (!user && isProtectedRoute) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/auth/login'
-    url.searchParams.set('redirectTo', path) // Save where they were trying to go
-    return NextResponse.redirect(url)
+  // Redirect logic
+  if (!user && isProtectedPath) {
+    // Not logged in, trying to access protected path
+    const redirectUrl = request.nextUrl.clone()
+    redirectUrl.pathname = '/auth/login'
+    redirectUrl.searchParams.set('redirectTo', path)
+    return NextResponse.redirect(redirectUrl)
   }
 
-  // If user IS logged in and trying to access auth pages, redirect to their dashboard
-  if (user && path.startsWith('/auth')) {
-    // You'll need to check user role here if you want role-based redirects
-    // For now, just redirect to a default page
-    const url = request.nextUrl.clone()
-    url.pathname = '/student/dashboard' // or determine based on user role
-    return NextResponse.redirect(url)
+  if (user && (path === '/auth/login' || path === '/auth/signup')) {
+    // Logged in, trying to access auth pages
+    const redirectUrl = request.nextUrl.clone()
+    redirectUrl.pathname = '/student/dashboard' // Default redirect
+    return NextResponse.redirect(redirectUrl)
   }
 
   return response
