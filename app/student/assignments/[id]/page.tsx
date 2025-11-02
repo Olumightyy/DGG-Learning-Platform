@@ -46,7 +46,7 @@ export default function AssignmentPage() {
         .select("*")
         .eq("assignment_id", id)
         .eq("student_id", user.id)
-        .maybeSingle() // Changed from .single()
+        .maybeSingle()
 
       if (submissionData && !submissionError) {
         setSubmission(submissionData)
@@ -81,26 +81,33 @@ export default function AssignmentPage() {
 
       let finalFileUrl = fileUrl
 
-      // Upload file if provided
+      // Upload file directly to Supabase Storage if provided
       if (uploadedFile) {
         setUploadProgress(30)
 
-        const formData = new FormData()
-        formData.append("file", uploadedFile)
+        // Create unique filename
+        const timestamp = Date.now()
+        const fileName = `${user.id}/${id}/${timestamp}_${uploadedFile.name}`
 
-        const uploadResponse = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        })
+        // Upload to storage
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from("assignments")
+          .upload(fileName, uploadedFile)
 
-        if (!uploadResponse.ok) {
-          const errorData = await uploadResponse.json()
-          throw new Error(errorData.error || "File upload failed")
+        if (uploadError) {
+          console.error("Upload error:", uploadError)
+          throw new Error(`File upload failed: ${uploadError.message}`)
         }
 
-        const uploadData = await uploadResponse.json()
-        finalFileUrl = uploadData.url
-        setUploadProgress(70)
+        setUploadProgress(60)
+
+        // Get public URL
+        const {
+          data: { publicUrl },
+        } = supabase.storage.from("assignments").getPublicUrl(fileName)
+
+        finalFileUrl = publicUrl
+        setUploadProgress(90)
       }
 
       // Upsert submission (insert or update)
@@ -246,18 +253,57 @@ export default function AssignmentPage() {
             </div>
 
             <div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Upload File (Optional)
-  </label>
-  <input
-    type="file"
-    onChange={handleFileChange}
-    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-    accept=".pdf,.doc,.docx,.txt,.zip,.py,.js,.html,.css,.java,.cpp"
-  />
-  {uploadedFile && (
-    <p className="text-sm text-green-600 mt-2 flex items-center gap-2">
-      ✓ Selected: {uploadedFile.name}
-    </p>
-  )}
-</div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Upload File (Optional)
+              </label>
+              <input
+                type="file"
+                onChange={handleFileChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                accept=".pdf,.doc,.docx,.txt,.zip,.py,.js,.html,.css,.java,.cpp"
+              />
+              {uploadedFile && (
+                <p className="text-sm text-green-600 mt-2 flex items-center gap-2">
+                  ✓ Selected: {uploadedFile.name}
+                </p>
+              )}
+            </div>
+
+            {fileUrl && (
+              <div className="bg-gray-50 p-3 rounded-md">
+                <p className="text-sm text-gray-600 mb-2">Current file:</p>
+                
+                  href={fileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline text-sm"
+                >
+                  View submitted file →
+                </a>
+              </div>
+            )}
+
+            {uploadProgress > 0 && uploadProgress < 100 && (
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${uploadProgress}%` }}
+                />
+              </div>
+            )}
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                <p className="text-sm">{error}</p>
+              </div>
+            )}
+
+            <Button type="submit" disabled={isSubmitting || (!submissionText.trim() && !uploadedFile && !fileUrl)} className="w-full">
+              {isSubmitting ? "Submitting..." : submission ? "Update Submission" : "Submit Assignment"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
