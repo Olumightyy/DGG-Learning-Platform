@@ -272,7 +272,7 @@ export default function AssignmentPage() {
             {fileUrl && (
               <div className="bg-gray-50 p-3 rounded-md">
                 <p className="text-sm text-gray-600 mb-2">Current file:</p>
-                
+                <a
                   href={fileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
