@@ -278,7 +278,7 @@ export default function AssignmentPage() {
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:underline text-sm"
                 >
-                  View submitted file →
+                  View submitted file &rarr;
                 </a>
               </div>
             )}
