@@ -36,7 +36,7 @@ export default async function InstructorLayout({
       <nav className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <Link href="/instructor/dashboard" className="text-2xl font-bold text-blue-600">
-            Learning Platform
+            DGG LEARNING PLATFORM
           </Link>
           <div className="flex gap-4 items-center">
             <span className="text-sm text-gray-600">{user.email}</span>

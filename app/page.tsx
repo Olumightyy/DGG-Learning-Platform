@@ -22,7 +22,7 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="max-w-2xl w-full text-center">
-        <h1 className="text-5xl font-bold text-gray-900 mb-4">Learning Platform</h1>
+        <h1 className="text-5xl font-bold text-gray-900 mb-4">DGG LEARNING PLATFORM</h1>
         <p className="text-xl text-gray-600 mb-8">
           A comprehensive learning management system for students and instructors
         </p>

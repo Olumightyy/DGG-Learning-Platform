@@ -7,9 +7,8 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "Learning Platform",
+  title: "DGG LEARNING PLATFORM",
   description: "A comprehensive learning management system",
-  generator: "v0.app",
 }
 
 export default function RootLayout({
