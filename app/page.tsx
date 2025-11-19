@@ -24,6 +24,80 @@ export default async function Home() {
     }
   }
 
+  const trainingTiers = [
+    {
+      title: "Basic Tier",
+      features: [
+        "3-month training",
+        "Digital Literacy",
+        "Specialized Course",
+        "Digital Monetization",
+        "Certificate",
+      ],
+      label: "Choose Basic",
+    },
+    {
+      title: "Standard Tier",
+      features: [
+        "6-month training",
+        "Expanded curriculum",
+        "Portfolio & resume support",
+        "Team projects",
+        "Standard certificate",
+      ],
+      label: "Choose Standard",
+    },
+    {
+      title: "Advanced Tier",
+      features: [
+        "1-year training",
+        "Google Certificate",
+        "1:1 mentorship",
+        "Premium tools & portfolio support",
+        "Advanced certificate",
+      ],
+      label: "Choose Advanced",
+    },
+  ]
+
+  const trainingStages = [
+    {
+      name: "Stage 1: Digital Literacy",
+      emoji: "📖",
+      details: [
+        "Computer components basics",
+        "Basic OS & software navigation",
+        "Internet & browser fundamentals",
+        "Online communication & collaboration",
+        "AI assistance and prompting",
+      ],
+    },
+    {
+      name: "Stage 2: Specialized Skills",
+      emoji: "💻",
+      details: [
+        "Coding (Python, JavaScript, HTML, CSS)",
+        "AI & machine learning basics",
+        "Data analytics with spreadsheets, SQL, Power BI, Tableau",
+        "Digital marketing & online branding",
+        "Web design, development & CRM integrations",
+      ],
+    },
+    {
+      name: "Stage 3: Digital Monetization",
+      emoji: "💰",
+      details: [
+        "Freelancing on platforms like Upwork",
+        "Build online portfolio & resume/CV",
+        "Affiliate marketing & e-commerce",
+        "Content creation and outreach monetization",
+      ],
+    },
+  ]
+
+  const scrollContainerClasses =
+    "flex gap-6 overflow-x-auto hide-scrollbar snap-x snap-mandatory px-1 pb-2 md:grid md:grid-cols-3 md:overflow-visible md:snap-none md:px-0"
+
   return (
     <div className="relative min-h-screen bg-white text-gray-900">
       {/* Background accents */}
@@ -206,7 +280,6 @@ export default async function Home() {
         </div>
       </section>
 
-
       {/* Why Choose D-Global Growthfield */}
       <section className="bg-[#f9f9f9] py-16 px-4">
         <div className="max-w-2xl mx-auto">
@@ -245,154 +318,153 @@ export default async function Home() {
         </div>
       </section>
       <section className="bg-[#f9f9f9] py-16 px-4" id="skills">
-  <div className="max-w-4xl mx-auto">
-    <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[#512d7c]">
-      Available Digital Skills
-    </h2>
-    <p className="mb-8 text-gray-700">
-      Explore our range of in-demand digital skills to choose the course that aligns with your career goals. Each skill is taught by industry experts to prepare you for the digital economy.
-    </p>
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {/* Digital Literacy */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
-        <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
-          <span className="text-2xl">💻</span> Digital Literacy
-        </h3>
-        <p className="text-gray-600">
-          Master essential computer and internet skills, including software navigation, online communication, and digital tools for everyday tasks.
-        </p>
-      </div>
-      {/* UI/UX Design */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
-        <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
-          <span className="text-2xl">🎨</span> UI/UX Design
-        </h3>
-        <p className="text-gray-600">
-          Learn to create user-friendly interfaces and seamless experiences for websites and apps, focusing on design principles and user research.
-        </p>
-      </div>
-      {/* Data Analytics */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
-        <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
-          <span className="text-2xl">📊</span> Data Analytics
-        </h3>
-        <p className="text-gray-600">
-          Gain expertise in analyzing data to uncover insights, using tools like Excel, Tableau, and Power BI for data-driven decisions.
-        </p>
-      </div>
-      {/* Cyber Security */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
-        <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
-          <span className="text-2xl">🛡️</span> Cyber Security
-        </h3>
-        <p className="text-gray-600">
-          Develop skills to protect digital assets, covering threat detection, encryption, and secure system management.
-        </p>
-      </div>
-      {/* Digital Marketing */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
-        <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
-          <span className="text-2xl">📢</span> Digital Marketing
-        </h3>
-        <p className="text-gray-600">
-          Master strategies for online advertising, SEO, content marketing, and social media to boost brand visibility.
-        </p>
-      </div>
-      {/* Digital Branding */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
-        <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
-          <span className="text-2xl">🖌️</span> Digital Branding
-        </h3>
-        <p className="text-gray-600">
-          Learn to build and manage a strong online brand identity through logos, visuals, and consistent messaging.
-        </p>
-      </div>
-      {/* Graphics & 3D Design */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
-        <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
-          <span className="text-2xl">🧊</span> Graphics & 3D Design
-        </h3>
-        <p className="text-gray-600">
-          Create stunning visuals and 3D models for branding, games, and animations using tools like Photoshop, Blender, and Illustrator.
-        </p>
-      </div>
-      {/* Coding */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
-        <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
-          <span className="text-2xl">💻</span> Coding
-        </h3>
-        <p className="text-gray-600">
-          Acquire programming skills in Python, R, SQL, HTML, CSS, and JavaScript to build software and web applications.
-        </p>
-      </div>
-      {/* Web Design & Development */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
-        <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
-          <span className="text-2xl">🌐</span> Web Design & Development
-        </h3>
-        <p className="text-gray-600">
-          Design and develop responsive websites using modern tools and frameworks for a professional online presence.
-        </p>
-      </div>
-      {/* Mobile App Development */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
-        <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
-          <span className="text-2xl">📱</span> Mobile App Development
-        </h3>
-        <p className="text-gray-600">
-          Create functional mobile applications for Android and iOS platforms, focusing on coding and user experience.
-        </p>
-      </div>
-      {/* Social Media Setup & Management */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
-        <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
-          <span className="text-2xl">👥</span> Social Media Setup & Management
-        </h3>
-        <p className="text-gray-600">
-          Learn to set up and manage social media accounts, creating engaging content to grow an online audience.
-        </p>
-      </div>
-      {/* AI & CRM */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
-        <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
-          <span className="text-2xl">🤖</span> AI & CRM
-        </h3>
-        <p className="text-gray-600">
-          Explore artificial intelligence and customer relationship management systems to automate and enhance business processes.
-        </p>
-      </div>
-      {/* Project Management */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
-        <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
-          <span className="text-2xl">🗂️</span> Project Management
-        </h3>
-        <p className="text-gray-600">
-          Develop skills to plan, execute, and deliver projects efficiently using tools like Trello, Asana, and Agile methodologies.
-        </p>
-      </div>
-      {/* Digital Monetization */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
-        <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
-          <span className="text-2xl">💸</span> Digital Monetization
-        </h3>
-        <p className="text-gray-600">
-          Discover strategies to earn income online through freelancing, e-commerce, affiliate marketing, and content creation.
-        </p>
-      </div>
-      {/* Cloud Computing */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
-        <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
-          <span className="text-2xl">☁️</span> Cloud Computing
-        </h3>
-        <p className="text-gray-600">
-          Learn to manage and deploy cloud-based solutions using platforms like AWS, Azure, and Google Cloud for scalability.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[#512d7c]">
+            Available Digital Skills
+          </h2>
+          <p className="mb-8 text-gray-700">
+            Explore our range of in-demand digital skills to choose the course that aligns with your career goals. Each skill is taught by industry experts to prepare you for the digital economy.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Digital Literacy */}
+            <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
+              <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
+                <span className="text-2xl">💻</span> Digital Literacy
+              </h3>
+              <p className="text-gray-600">
+                Master essential computer and internet skills, including software navigation, online communication, and digital tools for everyday tasks.
+              </p>
+            </div>
+            {/* UI/UX Design */}
+            <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
+              <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
+                <span className="text-2xl">🎨</span> UI/UX Design
+              </h3>
+              <p className="text-gray-600">
+                Learn to create user-friendly interfaces and seamless experiences for websites and apps, focusing on design principles and user research.
+              </p>
+            </div>
+            {/* Data Analytics */}
+            <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
+              <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
+                <span className="text-2xl">📊</span> Data Analytics
+              </h3>
+              <p className="text-gray-600">
+                Gain expertise in analyzing data to uncover insights, using tools like Excel, Tableau, and Power BI for data-driven decisions.
+              </p>
+            </div>
+            {/* Cyber Security */}
+            <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
+              <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
+                <span className="text-2xl">🛡️</span> Cyber Security
+              </h3>
+              <p className="text-gray-600">
+                Develop skills to protect digital assets, covering threat detection, encryption, and secure system management.
+              </p>
+            </div>
+            {/* Digital Marketing */}
+            <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
+              <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
+                <span className="text-2xl">📢</span> Digital Marketing
+              </h3>
+              <p className="text-gray-600">
+                Master strategies for online advertising, SEO, content marketing, and social media to boost brand visibility.
+              </p>
+            </div>
+            {/* Digital Branding */}
+            <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
+              <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
+                <span className="text-2xl">🖌️</span> Digital Branding
+              </h3>
+              <p className="text-gray-600">
+                Learn to build and manage a strong online brand identity through logos, visuals, and consistent messaging.
+              </p>
+            </div>
+            {/* Graphics & 3D Design */}
+            <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
+              <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
+                <span className="text-2xl">🧊</span> Graphics & 3D Design
+              </h3>
+              <p className="text-gray-600">
+                Create stunning visuals and 3D models for branding, games, and animations using tools like Photoshop, Blender, and Illustrator.
+              </p>
+            </div>
+            {/* Coding */}
+            <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
+              <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
+                <span className="text-2xl">💻</span> Coding
+              </h3>
+              <p className="text-gray-600">
+                Acquire programming skills in Python, R, SQL, HTML, CSS, and JavaScript to build software and web applications.
+              </p>
+            </div>
+            {/* Web Design & Development */}
+            <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
+              <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
+                <span className="text-2xl">🌐</span> Web Design & Development
+              </h3>
+              <p className="text-gray-600">
+                Design and develop responsive websites using modern tools and frameworks for a professional online presence.
+              </p>
+            </div>
+            {/* Mobile App Development */}
+            <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
+              <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
+                <span className="text-2xl">📱</span> Mobile App Development
+              </h3>
+              <p className="text-gray-600">
+                Create functional mobile applications for Android and iOS platforms, focusing on coding and user experience.
+              </p>
+            </div>
+            {/* Social Media Setup & Management */}
+            <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
+              <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
+                <span className="text-2xl">👥</span> Social Media Setup & Management
+              </h3>
+              <p className="text-gray-600">
+                Learn to set up and manage social media accounts, creating engaging content to grow an online audience.
+              </p>
+            </div>
+            {/* AI & CRM */}
+            <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
+              <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
+                <span className="text-2xl">🤖</span> AI & CRM
+              </h3>
+              <p className="text-gray-600">
+                Explore artificial intelligence and customer relationship management systems to automate and enhance business processes.
+              </p>
+            </div>
+            {/* Project Management */}
+            <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
+              <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
+                <span className="text-2xl">🗂️</span> Project Management
+              </h3>
+              <p className="text-gray-600">
+                Develop skills to plan, execute, and deliver projects efficiently using tools like Trello, Asana, and Agile methodologies.
+              </p>
+            </div>
+            {/* Digital Monetization */}
+            <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
+              <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
+                <span className="text-2xl">💸</span> Digital Monetization
+              </h3>
+              <p className="text-gray-600">
+                Discover strategies to earn income online through freelancing, e-commerce, affiliate marketing, and content creation.
+              </p>
+            </div>
+            {/* Cloud Computing */}
+            <div className="bg-white border border-gray-200 rounded-lg p-5 shadow flex flex-col hover:shadow-md">
+              <h3 className="text-lg font-semibold text-[#512d7c] mb-2 flex items-center gap-2">
+                <span className="text-2xl">☁️</span> Cloud Computing
+              </h3>
+              <p className="text-gray-600">
+                Learn to manage and deploy cloud-based solutions using platforms like AWS, Azure, and Google Cloud for scalability.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      
       {/* Training Tiers - Sample */}
       <section className="bg-white py-16 px-4" id="tiers">
         <div className="max-w-4xl mx-auto">
@@ -400,54 +472,28 @@ export default async function Home() {
           <p className="mb-8 text-gray-700">
             Choose the tier that best fits your goals. All tiers include hybrid delivery, weekly assessments, and a certificate of completion...
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Basic Tier */}
-            <div className="bg-[#f9f9f9] border-[#512d7c]/20 border rounded-xl p-6 shadow flex flex-col">
-              <h3 className="text-lg font-bold mb-3 text-[#512d7c]">Basic Tier</h3>
-              <ul className="list-disc pl-5 mb-4 space-y-2 text-gray-700">
-                <li>3-month training</li>
-                <li>Digital Literacy</li>
-                <li>Specialized Course</li>
-                <li>Digital Monetization</li>
-                <li>Certificate</li>
-              </ul>
-              <Button className="bg-[#f2b42c] text-white mt-auto hover:bg-[#512d7c]">
-                Choose Basic
-              </Button>
-            </div>
-            {/* Standard Tier */}
-            <div className="bg-[#f9f9f9] border-[#512d7c]/20 border rounded-xl p-6 shadow flex flex-col">
-              <h3 className="text-lg font-bold mb-3 text-[#512d7c]">Standard Tier</h3>
-              <ul className="list-disc pl-5 mb-4 space-y-2 text-gray-700">
-                <li>6-month training</li>
-                <li>Expanded curriculum</li>
-                <li>Portfolio and resume support</li>
-                <li>Team projects</li>
-                <li>Standard certificate</li>
-              </ul>
-              <Button className="bg-[#f2b42c] text-white mt-auto hover:bg-[#512d7c]">
-                Choose Standard
-              </Button>
-            </div>
-            {/* Advanced Tier */}
-            <div className="bg-[#f9f9f9] border-[#512d7c]/20 border rounded-xl p-6 shadow flex flex-col">
-              <h3 className="text-lg font-bold mb-3 text-[#512d7c]">Advanced Tier</h3>
-              <ul className="list-disc pl-5 mb-4 space-y-2 text-gray-700">
-                <li>1-year training</li>
-                <li>Google Certificate</li>
-                <li>1:1 mentorship</li>
-                <li>Premium tools & Portfolio support</li>
-                <li>Advanced certificate</li>
-              </ul>
-              <Button className="bg-[#f2b42c] text-white mt-auto hover:bg-[#512d7c]">
-                Choose Advanced
-              </Button>
-            </div>
+          <div className={scrollContainerClasses}>
+            {trainingTiers.map((tier) => (
+              <div
+                key={tier.title}
+                className="snap-start flex-shrink-0 w-[85%] min-w-[280px] max-w-sm rounded-xl border border-[#512d7c]/20 bg-[#f9f9f9] p-6 shadow md:mx-0 md:w-auto"
+              >
+                <h3 className="text-lg font-bold mb-3 text-[#512d7c]">{tier.title}</h3>
+                <ul className="list-disc pl-5 mb-4 space-y-2 text-gray-700">
+                  {tier.features.map((feature) => (
+                    <li key={feature}>{feature}</li>
+                  ))}
+                </ul>
+                <Button className="bg-[#f2b42c] text-white mt-auto hover:bg-[#512d7c]">
+                  {tier.label}
+                </Button>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-    {/* O'level Program Table */}
+      {/* O'level Program Table */}
       <div className="max-w-3xl mx-auto bg-white rounded-xl shadow px-4 py-8 mt-12">
         <h3 className="text-xl font-bold text-[#512d7c] mb-2">O'level Program (SSS Graduate)</h3>
         <p className="mb-4 text-gray-700">Targeted for secondary school graduates (ages 14-18+), with weekly sessions focused on hands-on projects for higher institutes and digital careers.</p>
@@ -482,56 +528,30 @@ export default async function Home() {
       {/* Training Strategy (Syllabus) */}
       <section className="bg-[#f9f9f9] py-16 px-4" id="strategy">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[#512d7c]">My Training Strategy</h2>
-          <p className="mb-8 text-gray-700">My tutoring program is structured in 3 stages to ensure progressive learning and practical application:</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Stage 1 */}
-            <div className="bg-white border rounded-lg shadow p-6 flex flex-col">
-              <h3 className="text-lg font-bold mb-2 flex items-center gap-2 text-[#512d7c]">
-                <span className="text-2xl">📖</span>
-                Stage 1: Digital Literacy
-              </h3>
-              <ul className="list-disc pl-5 space-y-2 text-gray-700">
-                <li>Computer Components basics</li>
-                <li>Basic Operating System & Software navigation</li>
-                <li>Internet & Browser basics</li>
-                <li>Online communication and collaboration tools</li>
-                <li>AI assistance and Prompting interaction</li>
-              </ul>
-            </div>
-            {/* Stage 2 */}
-            <div className="bg-white border rounded-lg shadow p-6 flex flex-col">
-              <h3 className="text-lg font-bold mb-2 flex items-center gap-2 text-[#512d7c]">
-                <span className="text-2xl">💻</span>
-                Stage 2: Specialized Skills
-              </h3>
-              <ul className="list-disc pl-5 space-y-2 text-gray-700">
-                <li>Coding (Python, JavaScript, HTML, CSS)</li>
-                <li>AI and machine learning basics</li>
-                <li>Data analytics with Spreadsheet, SQL, Power BI, Tableau</li>
-                <li>Digital marketing and online Branding</li>
-                <li>Web design and development</li>
-                <li>CRM setup & Integration (Salesforce, Zoho, Zapier, & HubSpot)</li>
-              </ul>
-            </div>
-            {/* Stage 3 */}
-            <div className="bg-white border rounded-lg shadow p-6 flex flex-col">
-              <h3 className="text-lg font-bold mb-2 flex items-center gap-2 text-[#512d7c]">
-                <span className="text-2xl">💰</span>
-                Stage 3: Digital Monetization
-              </h3>
-              <ul className="list-disc pl-5 space-y-2 text-gray-700">
-                <li>Freelancing on platforms like Upwork</li>
-                <li>Build your online portfolio & Resume/CV</li>
-                <li>Affiliate marketing and e-commerce</li>
-                <li>Content creation and outreach monetization strategies</li>
-              </ul>
-            </div>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-[#512d7c]">Our Training Strategy</h2>
+          <p className="mb-8 text-gray-700">Our tutoring program is structured in 3 stages to ensure progressive learning and practical application:</p>
+          <div className={scrollContainerClasses}>
+            {trainingStages.map((stage) => (
+              <div
+                key={stage.name}
+                className="snap-start flex-shrink-0 w-[85%] min-w-[280px] max-w-sm rounded-xl border border-gray-200 bg-white p-6 shadow md:w-auto"
+              >
+                <h3 className="text-lg font-bold mb-2 flex items-center gap-2 text-[#512d7c]">
+                  <span className="text-2xl">{stage.emoji}</span>
+                  {stage.name}
+                </h3>
+                <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                  {stage.details.map((detail) => (
+                    <li key={detail}>{detail}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-    {/* How it works */}
+      {/* How it works */}
       <section className="mx-auto max-w-7xl px-4 pb-20">
         <div className="rounded-2xl border border-[#512d7c]/15 bg-[#512d7c]/5 p-8">
           <h2 className="text-2xl font-semibold">How it works</h2>
@@ -563,21 +583,21 @@ export default async function Home() {
             ))}
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-xl bg-white p-4 ring-1 ring-gray-200">
+          <div className="mt-8 flex flex-col gap-4 rounded-xl bg-white p-4 ring-1 ring-gray-200 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-gray-700">
               Ready to get started? Create an account and start learning today.
-  Enrollment closes <span className="font-bold">Nov 30</span>. Only <span className="text-[#f2b42c] font-bold">15</span> slots left for this batch!
+              Enrollment closes <span className="font-bold">Nov 30</span>. Only <span className="text-[#f2b42c] font-bold">15</span> slots left for this batch!
             </p>
-            <div className="flex gap-3">
-              <Link href="/auth/sign-up">
-                <Button className="bg-[#512d7c] text-white hover:bg-[#3f2361]">
+            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+              <Link href="/auth/sign-up" className="w-full sm:w-auto">
+                <Button className="w-full justify-center bg-[#512d7c] text-white hover:bg-[#3f2361]">
                   Start learning
                 </Button>
               </Link>
-              <Link href="/auth/login">
+              <Link href="/auth/login" className="w-full sm:w-auto">
                 <Button
                   variant="outline"
-                  className="border-[#512d7c] text-[#512d7c] hover:bg-[#512d7c]/10"
+                  className="w-full justify-center border-[#512d7c] text-[#512d7c] hover:bg-[#512d7c]/10"
                 >
                   I already have an account
                 </Button>
