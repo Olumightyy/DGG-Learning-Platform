@@ -206,61 +206,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="mx-auto max-w-7xl px-4 pb-20">
-        <div className="rounded-2xl border border-[#512d7c]/15 bg-[#512d7c]/5 p-8">
-          <h2 className="text-2xl font-semibold">How it works</h2>
-          <div className="mt-6 grid gap-6 md:grid-cols-3">
-            {[
-              {
-                step: "1",
-                title: "Create or join",
-                desc: "Sign up to access your DGG courses and materials.",
-              },
-              {
-                step: "2",
-                title: "Learn",
-                desc: "Watch lessons and review resources for each module.",
-              },
-              {
-                step: "3",
-                title: "Submit",
-                desc: "Upload your files and track your submission status.",
-              },
-            ].map((s) => (
-              <div key={s.step} className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
-                <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#f2b42c] font-bold text-gray-900">
-                  {s.step}
-                </div>
-                <h3 className="mt-3 font-semibold">{s.title}</h3>
-                <p className="mt-1 text-sm text-gray-600">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-xl bg-white p-4 ring-1 ring-gray-200">
-            <p className="text-sm text-gray-700">
-              Ready to get started? Create an account and start learning today.
-  Enrollment closes <span className="font-bold">Nov 30</span>. Only <span className="text-[#f2b42c] font-bold">15</span> slots left for this batch!
-            </p>
-            <div className="flex gap-3">
-              <Link href="/auth/sign-up">
-                <Button className="bg-[#512d7c] text-white hover:bg-[#3f2361]">
-                  Start learning
-                </Button>
-              </Link>
-              <Link href="/auth/login">
-                <Button
-                  variant="outline"
-                  className="border-[#512d7c] text-[#512d7c] hover:bg-[#512d7c]/10"
-                >
-                  I already have an account
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Why Choose D-Global Growthfield */}
       <section className="bg-[#f9f9f9] py-16 px-4">
@@ -581,6 +526,62 @@ export default async function Home() {
                 <li>Affiliate marketing and e-commerce</li>
                 <li>Content creation and outreach monetization strategies</li>
               </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    {/* How it works */}
+      <section className="mx-auto max-w-7xl px-4 pb-20">
+        <div className="rounded-2xl border border-[#512d7c]/15 bg-[#512d7c]/5 p-8">
+          <h2 className="text-2xl font-semibold">How it works</h2>
+          <div className="mt-6 grid gap-6 md:grid-cols-3">
+            {[
+              {
+                step: "1",
+                title: "Create or join",
+                desc: "Sign up to access your DGG courses and materials.",
+              },
+              {
+                step: "2",
+                title: "Learn",
+                desc: "Watch lessons and review resources for each module.",
+              },
+              {
+                step: "3",
+                title: "Submit",
+                desc: "Upload your files and track your submission status.",
+              },
+            ].map((s) => (
+              <div key={s.step} className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
+                <div className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#f2b42c] font-bold text-gray-900">
+                  {s.step}
+                </div>
+                <h3 className="mt-3 font-semibold">{s.title}</h3>
+                <p className="mt-1 text-sm text-gray-600">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-xl bg-white p-4 ring-1 ring-gray-200">
+            <p className="text-sm text-gray-700">
+              Ready to get started? Create an account and start learning today.
+  Enrollment closes <span className="font-bold">Nov 30</span>. Only <span className="text-[#f2b42c] font-bold">15</span> slots left for this batch!
+            </p>
+            <div className="flex gap-3">
+              <Link href="/auth/sign-up">
+                <Button className="bg-[#512d7c] text-white hover:bg-[#3f2361]">
+                  Start learning
+                </Button>
+              </Link>
+              <Link href="/auth/login">
+                <Button
+                  variant="outline"
+                  className="border-[#512d7c] text-[#512d7c] hover:bg-[#512d7c]/10"
+                >
+                  I already have an account
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
