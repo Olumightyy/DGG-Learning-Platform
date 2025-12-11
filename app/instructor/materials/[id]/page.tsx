@@ -4,8 +4,6 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { DeleteButton } from "@/components/delete-button"
-import { ResourceUpload } from "@/components/resource-upload"
-import { ResourceItem } from "@/components/resource-item"
 
 export default async function MaterialPage({
   params,
@@ -38,13 +36,6 @@ export default async function MaterialPage({
     .select("*")
     .eq("material_id", id)
     .order("order_index", { ascending: true })
-
-  // Fetch resources
-  const { data: resources } = await supabase
-    .from("course_resources")
-    .select("*")
-    .eq("material_id", id)
-    .order("created_at", { ascending: false })
 
   // Fetch enrollments
   const { data: enrollments } = await supabase
@@ -125,54 +116,9 @@ export default async function MaterialPage({
         )}
       </div>
 
-      {/* Course Resources Section - IMPROVED! */}
-      <div>
-        <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center gap-2">
-            <h2 className="text-2xl font-bold text-gray-900">Course Resources</h2>
-            <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
-              {resources?.length || 0} uploaded
-            </span>
-          </div>
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-6">
-          {/* Upload Form */}
-          <div>
-            <ResourceUpload materialId={id} />
-          </div>
-
-          {/* Resources List */}
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <span>📋</span>
-              <span>Uploaded Resources</span>
-            </h3>
-            
-            {resources && resources.length > 0 ? (
-              <div className="space-y-3 max-h-[600px] overflow-y-auto pr-2">
-                {resources.map((resource) => (
-                  <ResourceItem key={resource.id} resource={resource} />
-                ))}
-              </div>
-            ) : (
-              <Card className="border-dashed">
-                <CardContent className="pt-6 text-center py-8">
-                  <div className="text-gray-400 text-4xl mb-3">📂</div>
-                  <p className="text-sm text-gray-600 mb-2">No resources uploaded yet</p>
-                  <p className="text-xs text-gray-500">Use the form on the left to add your first resource</p>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-        </div>
-      </div>
-
       {/* Enrolled Students */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">
-          Enrolled Students ({enrollments?.length || 0})
-        </h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Enrolled Students ({enrollments?.length || 0})</h2>
         {enrollments && enrollments.length > 0 ? (
           <Card>
             <CardContent className="pt-6">

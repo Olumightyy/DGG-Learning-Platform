@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { redirect } from "next/navigation"
 
 export default async function InstructorDashboard() {
   const supabase = await createClient()
@@ -9,206 +9,130 @@ export default async function InstructorDashboard() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) {
-    redirect("/auth/login")
-  }
+  if (!user) return null
 
+  // Fetch instructor's materials
   const { data: materials } = await supabase
     .from("materials")
-    .select("id, title, description, is_public, created_at")
+    .select("id, title, description, created_at")
     .eq("instructor_id", user.id)
     .order("created_at", { ascending: false })
 
+  // Fetch instructor's assignments
   const { data: assignments } = await supabase
     .from("assignments")
-    .select(`
-      id,
-      title,
-      description,
-      due_date,
-      material_id,
-      materials:material_id ( title )
-    `)
+    .select("id, title, due_date")
     .eq("instructor_id", user.id)
-    .order("created_at", { ascending: false })
+    .order("due_date", { ascending: true })
 
-  const { count: totalEnrollments } = await supabase
-    .from("enrollments")
-    .select("id", { count: "exact" })
-    .in("material_id", materials?.map((m) => m.id) || [])
-
-  const { count: pendingCount } = await supabase
+  // Count submissions
+  const { data: submissions } = await supabase
     .from("submissions")
-    .select("id", { count: "exact" })
+    .select("id, assignment_id, score")
     .in("assignment_id", assignments?.map((a) => a.id) || [])
-    .is("score", null)
+
+  const submissionsByAssignment = new Map<string, { total: number; graded: number }>()
+  assignments?.forEach((a) => {
+    submissionsByAssignment.set(a.id, { total: 0, graded: 0 })
+  })
+
+  submissions?.forEach((s) => {
+    const current = submissionsByAssignment.get(s.assignment_id) || { total: 0, graded: 0 }
+    current.total++
+    if (s.score !== null) current.graded++
+    submissionsByAssignment.set(s.assignment_id, current)
+  })
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-3xl font-bold text-[#512d7c]">Instructor Dashboard</h1>
-          <p className="mt-1 text-gray-600">Manage your courses, assignments, and students</p>
+          <h1 className="text-3xl font-bold text-gray-900">Instructor Dashboard</h1>
+          <p className="text-gray-600 mt-2">Manage your materials and assignments</p>
         </div>
-        <div className="flex gap-2">
-          <Link href="/instructor/materials/new" className="rounded-md bg-[#512d7c] px-3 py-2 text-sm font-medium text-white hover:bg-[#3f2361]">
-            + New Course
-          </Link>
-          <Link href="/instructor/assignments/new" className="rounded-md border border-[#512d7c] px-3 py-2 text-sm font-medium text-[#512d7c] hover:bg-[#512d7c]/10">
-            + New Assignment
-          </Link>
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="border-[#512d7c]/20">
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-gray-600">Total Courses</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold text-[#512d7c]">{materials?.length || 0}</p>
-          </CardContent>
-        </Card>
-        <Card className="border-[#512d7c]/20">
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-gray-600">Total Assignments</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold text-[#512d7c]">{assignments?.length || 0}</p>
-          </CardContent>
-        </Card>
-        <Card className="border-[#512d7c]/20">
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-gray-600">Total Students</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold text-[#512d7c]">{totalEnrollments || 0}</p>
-          </CardContent>
-        </Card>
-        <Card className="border-[#f2b42c]/30 bg-[#f2b42c]/10">
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-gray-700">Pending Reviews</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold text-[#a16f00]">{pendingCount || 0}</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Link href="/instructor/materials/new">
-          <Card className="cursor-pointer border-[#512d7c]/20 bg-[#512d7c]/5 transition-shadow hover:shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-[#512d7c]">+ Create New Course</CardTitle>
-              <CardDescription className="text-gray-700">
-                Add learning materials for students
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        </Link>
-
-        <Link href="/instructor/assignments/new">
-          <Card className="cursor-pointer border-[#f2b42c]/30 bg-[#f2b42c]/10 transition-shadow hover:shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-[#7a5a0d]">+ Create Assignment</CardTitle>
-              <CardDescription className="text-gray-700">
-                Assign tasks to your students
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        </Link>
-
-        <Link href="/instructor/materials">
-          <Card className="cursor-pointer border-[#512d7c]/20 transition-shadow hover:shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-[#512d7c]">View All Courses</CardTitle>
-              <CardDescription className="text-gray-700">
-                Manage existing courses
-              </CardDescription>
-            </CardHeader>
-          </Card>
+          <Button>Create Material</Button>
         </Link>
       </div>
 
-      {/* Courses */}
+      {/* Materials Section */}
       <div>
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-[#512d7c]">Your Courses</h2>
-          <Link href="/instructor/materials" className="text-[#512d7c] hover:underline">
-            View All →
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold text-gray-900">Your Materials</h2>
+          <Link href="/instructor/materials/new">
+            <Button variant="outline" size="sm">
+              + New Material
+            </Button>
           </Link>
         </div>
         {materials && materials.length > 0 ? (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {materials.slice(0, 6).map((material) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {materials.map((material) => (
               <Link key={material.id} href={`/instructor/materials/${material.id}`}>
-                <Card className="cursor-pointer transition-shadow hover:shadow-lg">
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
                   <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <CardTitle className="text-lg">{material.title}</CardTitle>
-                      {material.is_public && (
-                        <span className="rounded bg-green-100 px-2 py-1 text-xs text-green-800">
-                          Public
-                        </span>
-                      )}
-                    </div>
+                    <CardTitle className="text-lg">{material.title}</CardTitle>
                     <CardDescription>{material.description}</CardDescription>
                   </CardHeader>
+                  <CardContent>
+                    <p className="text-xs text-gray-500">
+                      Created: {new Date(material.created_at).toLocaleDateString()}
+                    </p>
+                  </CardContent>
                 </Card>
               </Link>
             ))}
           </div>
         ) : (
           <Card>
-            <CardContent className="pt-6 text-center">
-              <p className="mb-4 text-gray-600">You haven't created any courses yet.</p>
-              <Link
-                href="/instructor/materials/new"
-                className="inline-block rounded-md bg-[#512d7c] px-4 py-2 text-white hover:bg-[#3f2361]"
-              >
-                Create Your First Course
-              </Link>
+            <CardContent className="pt-6">
+              <p className="text-gray-600">You haven&apos;t created any materials yet.</p>
             </CardContent>
           </Card>
         )}
       </div>
 
-      {/* Recent Assignments */}
+      {/* Assignments Section */}
       <div>
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-[#512d7c]">Recent Assignments</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold text-gray-900">Your Assignments</h2>
+          <Link href="/instructor/assignments/new">
+            <Button variant="outline" size="sm">
+              + New Assignment
+            </Button>
+          </Link>
         </div>
         {assignments && assignments.length > 0 ? (
           <div className="space-y-4">
-            {assignments.slice(0, 5).map((assignment: any) => (
-              <Link key={assignment.id} href={`/instructor/assignments/${assignment.id}`}>
-                <Card className="cursor-pointer transition-shadow hover:shadow-lg">
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <CardTitle className="text-[#512d7c]">{assignment.title}</CardTitle>
-                        <CardDescription>{assignment.description}</CardDescription>
-                        <p className="mt-1 text-sm text-gray-500">
-                          Course: {assignment.materials?.title || "Unknown"}
-                        </p>
+            {assignments.map((assignment) => {
+              const stats = submissionsByAssignment.get(assignment.id) || { total: 0, graded: 0 }
+              const dueDate = assignment.due_date ? new Date(assignment.due_date) : null
+
+              return (
+                <Link key={assignment.id} href={`/instructor/assignments/${assignment.id}`}>
+                  <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <CardTitle>{assignment.title}</CardTitle>
+                          {dueDate && <p className="text-sm text-gray-500 mt-1">Due: {dueDate.toLocaleDateString()}</p>}
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm text-gray-600">
+                            {stats.graded}/{stats.total} graded
+                          </p>
+                        </div>
                       </div>
-                      {assignment.due_date && (
-                        <p className="text-sm font-medium text-[#a16f00]">
-                          Due: {new Date(assignment.due_date).toLocaleDateString()}
-                        </p>
-                      )}
-                    </div>
-                  </CardHeader>
-                </Card>
-              </Link>
-            ))}
+                    </CardHeader>
+                  </Card>
+                </Link>
+              )
+            })}
           </div>
         ) : (
           <Card>
-            <CardContent className="pt-6 text-center">
-              <p className="text-gray-600">No assignments created yet.</p>
+            <CardContent className="pt-6">
+              <p className="text-gray-600">You haven&apos;t created any assignments yet.</p>
             </CardContent>
           </Card>
         )}

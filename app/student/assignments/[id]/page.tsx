@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+
 import { useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -32,23 +33,19 @@ export default function AssignmentPage() {
       if (!user) return
 
       // Fetch assignment
-      const { data: assignmentData } = await supabase
-        .from("assignments")
-        .select("*")
-        .eq("id", id)
-        .single()
+      const { data: assignmentData } = await supabase.from("assignments").select("*").eq("id", id).single()
 
       setAssignment(assignmentData)
 
-      // Fetch submission - use maybeSingle() instead of single()
-      const { data: submissionData, error: submissionError } = await supabase
+      // Fetch submission
+      const { data: submissionData } = await supabase
         .from("submissions")
         .select("*")
         .eq("assignment_id", id)
         .eq("student_id", user.id)
-        .maybeSingle()
+        .single()
 
-      if (submissionData && !submissionError) {
+      if (submissionData) {
         setSubmission(submissionData)
         setSubmissionText(submissionData.submission_text || "")
         setFileUrl(submissionData.file_url || "")
@@ -58,7 +55,7 @@ export default function AssignmentPage() {
     }
 
     fetchData()
-  }, [id])
+  }, [id, supabase])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -81,97 +78,107 @@ export default function AssignmentPage() {
 
       let finalFileUrl = fileUrl
 
-      // Upload file directly to Supabase Storage if provided
+      // Upload file if provided
       if (uploadedFile) {
-        setUploadProgress(30)
+        setUploadProgress(50)
 
-        // Create unique filename
-        const timestamp = Date.now()
-        const fileName = `${user.id}/${id}/${timestamp}_${uploadedFile.name}`
+        // Create or get submission first to use its ID
+        let submissionId = submission?.id
 
-        // Upload to storage
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from("assignments")
-          .upload(fileName, uploadedFile)
+        if (!submissionId) {
+          const { data: newSubmission, error: createError } = await supabase
+            .from("submissions")
+            .insert({
+              assignment_id: id,
+              student_id: user.id,
+              submission_text: submissionText,
+              submitted_at: new Date().toISOString(),
+            })
+            .select()
+            .single()
 
-        if (uploadError) {
-          console.error("Upload error:", uploadError)
-          throw new Error(`File upload failed: ${uploadError.message}`)
+          if (createError) throw createError
+          submissionId = newSubmission.id
         }
 
-        setUploadProgress(60)
+        // Upload file
+        const formData = new FormData()
+        formData.append("file", uploadedFile)
+        formData.append("submissionId", submissionId)
 
-        // Get public URL
-        const {
-          data: { publicUrl },
-        } = supabase.storage.from("assignments").getPublicUrl(fileName)
-
-        finalFileUrl = publicUrl
-        setUploadProgress(90)
-      }
-
-      // Upsert submission (insert or update)
-      const submissionData = {
-        assignment_id: id,
-        student_id: user.id,
-        submission_text: submissionText,
-        file_url: finalFileUrl || null,
-        submitted_at: new Date().toISOString(),
-      }
-
-      const { data: upsertedSubmission, error: upsertError } = await supabase
-        .from("submissions")
-        .upsert(submissionData, {
-          onConflict: "assignment_id,student_id",
+        const uploadResponse = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
         })
-        .select()
+
+        if (!uploadResponse.ok) {
+          throw new Error("File upload failed")
+        }
+
+        const uploadData = await uploadResponse.json()
+        finalFileUrl = uploadData.url
+
+        setUploadProgress(100)
+      }
+
+      if (submission) {
+        // Update existing submission
+        const { error } = await supabase
+          .from("submissions")
+          .update({
+            submission_text: submissionText,
+            file_url: finalFileUrl,
+            submitted_at: new Date().toISOString(),
+          })
+          .eq("id", submission.id)
+
+        if (error) throw error
+      } else {
+        // Create new submission
+        const { error } = await supabase.from("submissions").insert({
+          assignment_id: id,
+          student_id: user.id,
+          submission_text: submissionText,
+          file_url: finalFileUrl,
+          submitted_at: new Date().toISOString(),
+        })
+
+        if (error) throw error
+      }
+
+      // Refresh submission data
+      const { data: updatedSubmission } = await supabase
+        .from("submissions")
+        .select("*")
+        .eq("assignment_id", id)
+        .eq("student_id", user.id)
         .single()
 
-      if (upsertError) throw upsertError
-
-      setUploadProgress(100)
-      setSubmission(upsertedSubmission)
-      setFileUrl(upsertedSubmission.file_url || "")
+      setSubmission(updatedSubmission)
+      setFileUrl(updatedSubmission.file_url || "")
       setUploadedFile(null)
-
-      // Success message
-      alert("Submission successful!")
+      setUploadProgress(0)
     } catch (err) {
-      console.error("Submission error:", err)
       setError(err instanceof Error ? err.message : "An error occurred")
+      setUploadProgress(0)
     } finally {
       setIsSubmitting(false)
-      setUploadProgress(0)
     }
   }
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading assignment...</p>
-        </div>
-      </div>
-    )
+    return <div className="text-center py-8">Loading...</div>
   }
 
   if (!assignment) {
-    return (
-      <div className="text-center py-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Assignment not found</h2>
-        <Link href="/student/dashboard">
-          <Button>Back to Dashboard</Button>
-        </Link>
-      </div>
-    )
+    return <div className="text-center py-8">Assignment not found</div>
   }
 
   const dueDate = assignment.due_date ? new Date(assignment.due_date) : null
   const isOverdue = dueDate && dueDate < new Date() && !submission
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto">
+    <div className="space-y-8">
       <div>
         <Link href="/student/dashboard">
           <Button variant="outline" className="mb-4 bg-transparent">
@@ -188,7 +195,7 @@ export default function AssignmentPage() {
             <CardTitle className="text-sm">Max Score</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{assignment.max_score || "N/A"}</p>
+            <p className="text-2xl font-bold">{assignment.max_score}</p>
           </CardContent>
         </Card>
         {dueDate && (
@@ -197,22 +204,17 @@ export default function AssignmentPage() {
               <CardTitle className="text-sm">Due Date</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className={`text-2xl font-bold ${isOverdue ? "text-red-600" : "text-gray-900"}`}>
-                {dueDate.toLocaleDateString()}
-              </p>
-              {isOverdue && <p className="text-xs text-red-600 mt-1">Overdue</p>}
+              <p className={`text-2xl font-bold ${isOverdue ? "text-red-600" : ""}`}>{dueDate.toLocaleDateString()}</p>
             </CardContent>
           </Card>
         )}
-        {submission && (
+        {submission && submission.score !== null && (
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm">Status</CardTitle>
+              <CardTitle className="text-sm">Your Score</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-green-600">
-                {submission.score !== null ? `${submission.score}/${assignment.max_score}` : "Submitted"}
-              </p>
+              <p className="text-2xl font-bold text-green-600">{submission.score}</p>
             </CardContent>
           </Card>
         )}
@@ -221,10 +223,10 @@ export default function AssignmentPage() {
       {submission && submission.feedback && (
         <Card className="border-blue-200 bg-blue-50">
           <CardHeader>
-            <CardTitle>Instructor Feedback</CardTitle>
+            <CardTitle>Feedback</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="whitespace-pre-wrap">{submission.feedback}</p>
+            <p>{submission.feedback}</p>
           </CardContent>
         </Card>
       )}
@@ -232,74 +234,49 @@ export default function AssignmentPage() {
       <Card>
         <CardHeader>
           <CardTitle>Your Submission</CardTitle>
-          <CardDescription>
-            {submission ? "You can update your submission below" : "Submit your work for this assignment"}
-          </CardDescription>
+          <CardDescription>{submission ? "Update your submission" : "Submit your work"}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Submission Text {!uploadedFile && !fileUrl && <span className="text-red-500">*</span>}
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Submission Text</label>
               <textarea
                 value={submissionText}
                 onChange={(e) => setSubmissionText(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 rows={6}
                 placeholder="Enter your submission here..."
-                required={!uploadedFile && !fileUrl}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Upload File (Optional)
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Upload File (Optional)</label>
               <input
                 type="file"
                 onChange={handleFileChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                accept=".pdf,.doc,.docx,.txt,.zip,.py,.js,.html,.css,.java,.cpp"
               />
-              {uploadedFile && (
-                <p className="text-sm text-green-600 mt-2 flex items-center gap-2">
-                  ✓ Selected: {uploadedFile.name}
-                </p>
-              )}
+              {uploadedFile && <p className="text-sm text-gray-600 mt-2">Selected: {uploadedFile.name}</p>}
             </div>
 
             {fileUrl && (
-              <div className="bg-gray-50 p-3 rounded-md">
+              <div>
                 <p className="text-sm text-gray-600 mb-2">Current file:</p>
-                <a
-                  href={fileUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline text-sm"
-                >
-                  View submitted file &rarr;
+                <a href={fileUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline text-sm">
+                  Download submission file
                 </a>
               </div>
             )}
 
             {uploadProgress > 0 && uploadProgress < 100 && (
               <div className="w-full bg-gray-200 rounded-full h-2">
-                <div
-                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${uploadProgress}%` }}
-                />
+                <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${uploadProgress}%` }} />
               </div>
             )}
 
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                <p className="text-sm">{error}</p>
-              </div>
-            )}
-
-            <Button type="submit" disabled={isSubmitting || (!submissionText.trim() && !uploadedFile && !fileUrl)} className="w-full">
-              {isSubmitting ? "Submitting..." : submission ? "Update Submission" : "Submit Assignment"}
+            {error && <p className="text-sm text-red-500">{error}</p>}
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Submitting..." : submission ? "Update Submission" : "Submit"}
             </Button>
           </form>
         </CardContent>
