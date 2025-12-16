@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import { redirect } from "next/navigation"
+import JoinLiveButton from '@/components/join-live-button'
 
 export default async function StudentDashboard() {
   const supabase = await createClient()
@@ -13,7 +14,7 @@ export default async function StudentDashboard() {
     redirect("/auth/login")
   }
 
-  // Fetch enrolled materials
+  // 1. Fetch enrolled materials first
   const { data: enrollments } = await supabase
     .from("enrollments")
     .select(`
@@ -26,32 +27,42 @@ export default async function StudentDashboard() {
     `)
     .eq("student_id", user.id)
 
-  // Get enrolled material IDs
-  const enrolledMaterialIds = enrollments?.map((e) => e.material_id) || []
+  // Normalize enrollments
+  const normalizedEnrollments = (enrollments || []).map((e: any) => ({
+    ...e,
+    material: Array.isArray(e.materials) ? e.materials[0] : e.materials,
+  }))
 
-  // Fetch ALL assignments with material info
-  const { data: allAssignments } = await supabase
-    .from("assignments")
-    .select(`
-      id,
-      title,
-      description,
-      due_date,
-      material_id,
-      materials:material_id (
+  // Get list of enrolled IDs
+  const enrolledMaterialIds = normalizedEnrollments.map((e: any) => e.material_id) || []
+
+  // 2. Fetch Assignments (STRICT FILTER)
+  // Only fetch assignments if the user is actually enrolled in something
+  let visibleAssignments: any[] = []
+
+  if (enrolledMaterialIds.length > 0) {
+    const { data: assignments } = await supabase
+      .from("assignments")
+      .select(`
         id,
         title,
-        is_public
-      )
-    `)
-    .order("created_at", { ascending: false })
+        description,
+        due_date,
+        material_id,
+        materials:material_id (
+          id,
+          title
+        )
+      `)
+      .in("material_id", enrolledMaterialIds) // <--- CRITICAL FIX: Only fetch for enrolled courses
+      .order("created_at", { ascending: false })
 
-  // Filter visible assignments
-  const visibleAssignments = allAssignments?.filter(
-    (assignment) =>
-      enrolledMaterialIds.includes(assignment.material_id) ||
-      assignment.materials?.is_public === true
-  ) || []
+    // Normalize the assignments
+    visibleAssignments = (assignments || []).map((a: any) => ({
+      ...a,
+      material: Array.isArray(a.materials) ? a.materials[0] : a.materials,
+    }))
+  }
 
   // Fetch submissions
   const { data: submissions } = await supabase
@@ -68,6 +79,11 @@ export default async function StudentDashboard() {
         <p className="text-gray-600 mt-2">Manage your learning materials and assignments</p>
       </div>
 
+      {/* Join Live Class */}
+      <div className="mt-4">
+        <JoinLiveButton />
+      </div>
+
       {/* Enrolled Materials */}
       <div>
         <div className="flex justify-between items-center mb-4">
@@ -79,14 +95,14 @@ export default async function StudentDashboard() {
           </Link>
         </div>
         
-        {enrollments && enrollments.length > 0 ? (
+        {normalizedEnrollments.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {enrollments.map((enrollment: any) => (
+            {normalizedEnrollments.map((enrollment: any) => (
               <Link key={enrollment.material_id} href={`/student/materials/${enrollment.material_id}`}>
                 <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
                   <CardHeader>
-                    <CardTitle className="text-lg">{enrollment.materials?.title || "Untitled"}</CardTitle>
-                    <CardDescription>{enrollment.materials?.description || "No description"}</CardDescription>
+                    <CardTitle className="text-lg">{enrollment.material?.title || "Untitled"}</CardTitle>
+                    <CardDescription>{enrollment.material?.description || "No description"}</CardDescription>
                   </CardHeader>
                 </Card>
               </Link>
@@ -109,7 +125,7 @@ export default async function StudentDashboard() {
       {/* Assignments */}
       <div>
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Your Assignments</h2>
-        {visibleAssignments && visibleAssignments.length > 0 ? (
+        {visibleAssignments.length > 0 ? (
           <div className="space-y-4">
             {visibleAssignments.map((assignment: any) => {
               const submission = submissionMap.get(assignment.id)
@@ -127,7 +143,7 @@ export default async function StudentDashboard() {
                           <CardDescription>{assignment.description}</CardDescription>
                           <div className="mt-2">
                             <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded">
-                              {assignment.materials?.title || "Unknown Course"}
+                              {assignment.material?.title || "Unknown Course"}
                             </span>
                           </div>
                         </div>
@@ -160,7 +176,7 @@ export default async function StudentDashboard() {
         ) : (
           <Card>
             <CardContent className="pt-6 text-center">
-              <p className="text-gray-600">No assignments available yet.</p>
+              <p className="text-gray-600">No active assignments for your courses.</p>
             </CardContent>
           </Card>
         )}

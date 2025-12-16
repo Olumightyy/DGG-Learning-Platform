@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import { redirect } from "next/navigation"
+import LiveClassManager from '@/components/live-class-manager'
 
 export default async function InstructorDashboard() {
   const supabase = await createClient()
@@ -59,6 +60,11 @@ export default async function InstructorDashboard() {
           </Link>
         </div>
       </div>
+
+            {/* Live Class Manager */}
+            <div className="mt-4">
+              <LiveClassManager />
+            </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
