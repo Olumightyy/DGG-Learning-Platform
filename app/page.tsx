@@ -235,7 +235,7 @@ export default async function Home() {
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
             {
-              title: "YouTube lessons",
+              title: "Video lessons",
               desc: "Watch embedded videos with titles, descriptions, and modules.",
               emoji: "🎥",
             },
@@ -495,8 +495,8 @@ export default async function Home() {
 
       {/* O'level Program Table */}
       <div className="max-w-3xl mx-auto bg-white rounded-xl shadow px-4 py-8 mt-12">
-        <h3 className="text-xl font-bold text-[#512d7c] mb-2">O'level Program (SSS Graduate)</h3>
-        <p className="mb-4 text-gray-700">Targeted for secondary school graduates (ages 14-18+), with weekly sessions focused on hands-on projects for higher institutes and digital careers.</p>
+        <h3 className="text-xl font-bold text-[#512d7c] mb-2">🎓 Advanced Skills & Career Development Program</h3>
+        <p className="mb-4 text-gray-700">Targeted for all age groups looking to advance their digital education and digital career prospects. Weekly sessions are focused on hands-on projects and essential skills for higher learning and the modern workplace.</p>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse mb-4">
             <thead>
@@ -508,7 +508,7 @@ export default async function Home() {
             </thead>
             <tbody>
               <tr>
-                <td className="p-2 border">Tue,Wed & Fri</td>
+                <td className="p-2 border">Mon,Wed & Fri</td>
                 <td className="p-2 border">10 AM - 4 PM</td>
                 <td className="p-2 border">Training Session</td>
               </tr>

@@ -606,7 +606,7 @@ async function Home() {
                         className: "mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3",
                         children: [
                             {
-                                title: "YouTube lessons",
+                                title: "Video lessons",
                                 desc: "Watch embedded videos with titles, descriptions, and modules.",
                                 emoji: "🎥"
                             },
@@ -1511,7 +1511,7 @@ async function Home() {
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                         className: "text-xl font-bold text-[#512d7c] mb-2",
-                        children: "O'level Program (SSS Graduate)"
+                        children: "🎓 Advanced Skills & Career Development Program"
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
                         lineNumber: 498,
@@ -1519,7 +1519,7 @@ async function Home() {
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         className: "mb-4 text-gray-700",
-                        children: "Targeted for secondary school graduates (ages 14-18+), with weekly sessions focused on hands-on projects for higher institutes and digital careers."
+                        children: "Targeted for all age groups looking to advance their digital education and digital career prospects. Weekly sessions are focused on hands-on projects and essential skills for higher learning and the modern workplace."
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
                         lineNumber: 499,
@@ -1575,7 +1575,7 @@ async function Home() {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                                     className: "p-2 border",
-                                                    children: "Tue,Wed & Fri"
+                                                    children: "Mon,Wed & Fri"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
                                                     lineNumber: 511,
