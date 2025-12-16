@@ -1,25 +1,25 @@
 {
   "node": {
-    "0018be87028cd2cd78288d37766f0062039ecf1b94": {
+    "00450c53da3dd858c1fc329d1ccc14d42b0880a041": {
       "workers": {
-        "app/student/assignments/[id]/page": {
-          "moduleId": "[project]/.next-internal/server/app/student/assignments/[id]/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/student/layout.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+        "app/instructor/dashboard/page": {
+          "moduleId": "[project]/.next-internal/server/app/instructor/dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/instructor/layout.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
           "async": false,
           "exportedName": "$$RSC_SERVER_ACTION_0",
-          "filename": "app/student/layout.tsx"
+          "filename": "app/instructor/layout.tsx"
         },
-        "app/student/dashboard/page": {
-          "moduleId": "[project]/.next-internal/server/app/student/dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/student/layout.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+        "app/instructor/materials/page": {
+          "moduleId": "[project]/.next-internal/server/app/instructor/materials/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/instructor/layout.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
           "async": false,
           "exportedName": "$$RSC_SERVER_ACTION_0",
-          "filename": "app/student/layout.tsx"
+          "filename": "app/instructor/layout.tsx"
         }
       },
       "layer": {
-        "app/student/assignments/[id]/page": "rsc",
-        "app/student/dashboard/page": "rsc"
+        "app/instructor/dashboard/page": "rsc",
+        "app/instructor/materials/page": "rsc"
       },
-      "filename": "app/student/layout.tsx",
+      "filename": "app/instructor/layout.tsx",
       "exportedName": "$$RSC_SERVER_ACTION_0"
     }
   },

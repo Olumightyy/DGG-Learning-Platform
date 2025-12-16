@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import LiveClassManager from '@/components/live-class-manager'
+import DeleteAssignmentButton from '@/components/delete-assignment-button'
 
 export default async function InstructorDashboard() {
   const supabase = await createClient()
@@ -189,26 +190,31 @@ export default async function InstructorDashboard() {
         {assignments && assignments.length > 0 ? (
           <div className="space-y-4">
             {assignments.slice(0, 5).map((assignment: any) => (
-              <Link key={assignment.id} href={`/instructor/assignments/${assignment.id}`}>
-                <Card className="cursor-pointer transition-shadow hover:shadow-lg">
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <CardTitle className="text-[#512d7c]">{assignment.title}</CardTitle>
-                        <CardDescription>{assignment.description}</CardDescription>
-                        <p className="mt-1 text-sm text-gray-500">
-                          Course: {assignment.materials?.title || "Unknown"}
-                        </p>
+              <div key={assignment.id} className="flex items-stretch">
+                <Link href={`/instructor/assignments/${assignment.id}`} className="flex-1">
+                  <Card className="cursor-pointer transition-shadow hover:shadow-lg">
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <CardTitle className="text-[#512d7c]">{assignment.title}</CardTitle>
+                          <CardDescription>{assignment.description}</CardDescription>
+                          <p className="mt-1 text-sm text-gray-500">
+                            Course: {assignment.materials?.title || "Unknown"}
+                          </p>
+                        </div>
+                        {assignment.due_date && (
+                          <p className="text-sm font-medium text-[#a16f00]">
+                            Due: {new Date(assignment.due_date).toLocaleDateString()}
+                          </p>
+                        )}
                       </div>
-                      {assignment.due_date && (
-                        <p className="text-sm font-medium text-[#a16f00]">
-                          Due: {new Date(assignment.due_date).toLocaleDateString()}
-                        </p>
-                      )}
-                    </div>
-                  </CardHeader>
-                </Card>
-              </Link>
+                    </CardHeader>
+                  </Card>
+                </Link>
+                <div className="ml-2 self-start">
+                  <DeleteAssignmentButton assignmentId={assignment.id} />
+                </div>
+              </div>
             ))}
           </div>
         ) : (

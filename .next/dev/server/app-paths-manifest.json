@@ -1,6 +1,8 @@
 {
+  "/api/assignments/[id]/delete/route": "app/api/assignments/[id]/delete/route.js",
   "/api/live-class/route": "app/api/live-class/route.js",
-  "/page": "app/page.js",
-  "/student/assignments/[id]/page": "app/student/assignments/[id]/page.js",
-  "/student/dashboard/page": "app/student/dashboard/page.js"
+  "/auth/login/page": "app/auth/login/page.js",
+  "/instructor/dashboard/page": "app/instructor/dashboard/page.js",
+  "/instructor/materials/page": "app/instructor/materials/page.js",
+  "/page": "app/page.js"
 }
