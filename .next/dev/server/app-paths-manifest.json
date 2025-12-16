@@ -1,8 +1,12 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
   "/api/assignments/[id]/delete/route": "app/api/assignments/[id]/delete/route.js",
   "/api/live-class/route": "app/api/live-class/route.js",
   "/auth/login/page": "app/auth/login/page.js",
+  "/instructor/assignments/new/page": "app/instructor/assignments/new/page.js",
   "/instructor/dashboard/page": "app/instructor/dashboard/page.js",
+  "/instructor/materials/[id]/page": "app/instructor/materials/[id]/page.js",
   "/instructor/materials/page": "app/instructor/materials/page.js",
-  "/page": "app/page.js"
+  "/page": "app/page.js",
+  "/student/dashboard/page": "app/student/dashboard/page.js"
 }

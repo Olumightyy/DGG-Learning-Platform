@@ -2,8 +2,20 @@
   "node": {
     "00450c53da3dd858c1fc329d1ccc14d42b0880a041": {
       "workers": {
+        "app/instructor/assignments/new/page": {
+          "moduleId": "[project]/.next-internal/server/app/instructor/assignments/new/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/instructor/layout.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "$$RSC_SERVER_ACTION_0",
+          "filename": "app/instructor/layout.tsx"
+        },
         "app/instructor/dashboard/page": {
           "moduleId": "[project]/.next-internal/server/app/instructor/dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/instructor/layout.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "$$RSC_SERVER_ACTION_0",
+          "filename": "app/instructor/layout.tsx"
+        },
+        "app/instructor/materials/[id]/page": {
+          "moduleId": "[project]/.next-internal/server/app/instructor/materials/[id]/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/instructor/layout.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
           "async": false,
           "exportedName": "$$RSC_SERVER_ACTION_0",
           "filename": "app/instructor/layout.tsx"
@@ -16,10 +28,27 @@
         }
       },
       "layer": {
+        "app/instructor/assignments/new/page": "rsc",
         "app/instructor/dashboard/page": "rsc",
+        "app/instructor/materials/[id]/page": "rsc",
         "app/instructor/materials/page": "rsc"
       },
       "filename": "app/instructor/layout.tsx",
+      "exportedName": "$$RSC_SERVER_ACTION_0"
+    },
+    "0018be87028cd2cd78288d37766f0062039ecf1b94": {
+      "workers": {
+        "app/student/dashboard/page": {
+          "moduleId": "[project]/.next-internal/server/app/student/dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/student/layout.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "$$RSC_SERVER_ACTION_0",
+          "filename": "app/student/layout.tsx"
+        }
+      },
+      "layer": {
+        "app/student/dashboard/page": "rsc"
+      },
+      "filename": "app/student/layout.tsx",
       "exportedName": "$$RSC_SERVER_ACTION_0"
     }
   },

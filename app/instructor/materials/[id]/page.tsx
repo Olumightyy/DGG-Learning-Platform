@@ -46,11 +46,8 @@ export default async function MaterialPage({
     .eq("material_id", id)
     .order("created_at", { ascending: false })
 
-  // Fetch enrollments
-  const { data: enrollments } = await supabase
-    .from("enrollments")
-    .select("student_id, profiles(email)")
-    .eq("material_id", id)
+  // Fetch enrolled students via RPC (returns student_id, email, full_name, enrolled_at)
+  const { data: students } = await supabase.rpc('get_course_students', { p_material_id: id })
 
   return (
     <div className="space-y-8">
@@ -170,21 +167,29 @@ export default async function MaterialPage({
 
       {/* Enrolled Students */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">
-          Enrolled Students ({enrollments?.length || 0})
-        </h2>
-        {enrollments && enrollments.length > 0 ? (
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Enrolled Students ({students?.length || 0})</h2>
+        {students && students.length > 0 ? (
           <Card>
             <CardContent className="pt-6">
-              <div className="space-y-2">
-                {enrollments.map((enrollment) => (
-                  <div
-                    key={enrollment.student_id}
-                    className="flex items-center justify-between py-2 border-b last:border-b-0"
-                  >
-                    <span className="text-gray-700 font-medium">{enrollment.profiles?.email}</span>
-                  </div>
-                ))}
+              <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr>
+                      <th className="pb-2">Student Name</th>
+                      <th className="pb-2">Email</th>
+                      <th className="pb-2">Enrolled At</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {students.map((s: any) => (
+                      <tr key={s.student_id} className="border-t">
+                        <td className="py-2">{s.full_name || '—'}</td>
+                        <td className="py-2">{s.email}</td>
+                        <td className="py-2">{s.enrolled_at ? new Date(s.enrolled_at).toLocaleString() : '—'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </CardContent>
           </Card>
