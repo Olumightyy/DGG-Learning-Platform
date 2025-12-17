@@ -125,7 +125,7 @@ function Button({ className, variant, size, asChild = false, ...props }) {
 "[project]/app/student/layout.tsx [app-rsc] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
-/* __next_internal_action_entry_do_not_use__ [{"0018be87028cd2cd78288d37766f0062039ecf1b94":"$$RSC_SERVER_ACTION_0"},"",""] */ __turbopack_context__.s([
+/* __next_internal_action_entry_do_not_use__ [{"00d64e341004fe88a5c8e941a5c5edfb1ede2e467b":"$$RSC_SERVER_ACTION_0"},"",""] */ __turbopack_context__.s([
     "$$RSC_SERVER_ACTION_0",
     ()=>$$RSC_SERVER_ACTION_0,
     "default",
@@ -149,7 +149,7 @@ const $$RSC_SERVER_ACTION_0 = async function handleLogout() {
     await supabase.auth.signOut();
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$client$2f$components$2f$navigation$2e$react$2d$server$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["redirect"])("/");
 };
-(0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])($$RSC_SERVER_ACTION_0, "0018be87028cd2cd78288d37766f0062039ecf1b94", null);
+(0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$build$2f$webpack$2f$loaders$2f$next$2d$flight$2d$loader$2f$server$2d$reference$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["registerServerReference"])($$RSC_SERVER_ACTION_0, "00d64e341004fe88a5c8e941a5c5edfb1ede2e467b", null);
 async function StudentLayout({ children }) {
     const supabase = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2f$server$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["createClient"])();
     const { data: { user } } = await supabase.auth.getUser();

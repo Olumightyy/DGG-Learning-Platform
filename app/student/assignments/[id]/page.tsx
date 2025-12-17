@@ -91,7 +91,7 @@ export default function AssignmentPage() {
 
         // Upload to storage
         const { data: uploadData, error: uploadError } = await supabase.storage
-          .from("assignments")
+          .from("submissions")
           .upload(fileName, uploadedFile)
 
         if (uploadError) {
@@ -104,7 +104,7 @@ export default function AssignmentPage() {
         // Get public URL
         const {
           data: { publicUrl },
-        } = supabase.storage.from("assignments").getPublicUrl(fileName)
+        } = supabase.storage.from("submissions").getPublicUrl(fileName)
 
         finalFileUrl = publicUrl
         setUploadProgress(90)
@@ -180,6 +180,33 @@ export default function AssignmentPage() {
         </Link>
         <h1 className="text-3xl font-bold text-gray-900">{assignment.title}</h1>
         <p className="text-gray-600 mt-2">{assignment.description}</p>
+
+        {/* Assignment Resource Download */}
+        {assignment.resource_url && assignment.resource_name && (
+          <div className="mt-4">
+            <a
+              href={assignment.resource_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              <span>Download Assignment Resource: {assignment.resource_name}</span>
+            </a>
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

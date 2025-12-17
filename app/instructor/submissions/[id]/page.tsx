@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { GradeSubmissionForm } from "@/components/grade-submission-form"
+import { updateGradeFromForm } from "@/app/actions/update-grade"
 
 export default async function SubmissionGradePage({
   params,
@@ -42,7 +42,15 @@ export default async function SubmissionGradePage({
     .eq("id", id)
     .single()
 
-  if (!submission || submission.assignments?.materials?.instructor_id !== user.id) {
+  // Normalize nested shapes for materials and determine instructor ownership
+  const assignment = submission?.assignments
+  const materialsRaw = assignment?.materials
+  const materialsArray = Array.isArray(materialsRaw) ? materialsRaw : materialsRaw ? [materialsRaw] : []
+
+  const computedInstructorId =
+    assignment?.instructor_id ?? materialsArray[0]?.instructor_id ?? materialsRaw?.instructor_id ?? null
+
+  if (!submission || computedInstructorId !== user.id) {
     notFound()
   }
 
@@ -109,13 +117,45 @@ export default async function SubmissionGradePage({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <GradeSubmissionForm
-            submissionId={submission.id}
-            currentScore={submission.score}
-            currentFeedback={submission.feedback}
-            maxScore={submission.assignments.max_score}
-            assignmentId={submission.assignment_id}
-          />
+          <form action={updateGradeFromForm} className="space-y-4">
+            <input type="hidden" name="submission_id" value={submission.id} />
+            <input type="hidden" name="assignment_id" value={submission.assignment_id} />
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Score (out of {submission.assignments.max_score}) <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="number"
+                name="score"
+                defaultValue={submission.score ?? ""}
+                min={0}
+                max={submission.assignments.max_score}
+                step="0.5"
+                required
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder={`Enter score (0-${submission.assignments.max_score})`}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Feedback (Optional)</label>
+              <textarea
+                name="feedback"
+                defaultValue={submission.feedback ?? ""}
+                rows={6}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Provide feedback to the student..."
+              />
+            </div>
+
+            <div className="flex gap-2">
+              <Button type="submit">Save Grade</Button>
+              <Link href={`/instructor/assignments/${submission.assignment_id}`}>
+                <Button type="button" variant="outline">Cancel</Button>
+              </Link>
+            </div>
+          </form>
         </CardContent>
       </Card>
     </div>

@@ -3,6 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import { InlineGradeForm } from "@/components/inline-grade-form"
+
 
 export default async function InstructorAssignmentPage({
   params,
@@ -35,18 +37,28 @@ export default async function InstructorAssignmentPage({
     notFound()
   }
 
-  // Fetch all submissions for this assignment
+  // Fetch all submissions for this assignment (fetch profiles separately to avoid join/RLS issues)
   const { data: submissions } = await supabase
     .from("submissions")
-    .select(`
-      *,
-      profiles:student_id (
-        email,
-        full_name
-      )
+    .select(`*
     `)
     .eq("assignment_id", id)
     .order("submitted_at", { ascending: false })
+
+  // Fetch student profiles for the submissions (if any)
+  let profilesMap: Record<string, any> = {}
+  if (submissions && submissions.length > 0) {
+    const studentIds = submissions.map((s: any) => s.student_id)
+    const { data: profiles } = await supabase
+      .from('profiles')
+      .select('id, full_name, email')
+      .in('id', studentIds)
+
+    profilesMap = (profiles || []).reduce((acc: any, p: any) => {
+      acc[p.id] = p
+      return acc
+    }, {})
+  }
 
   const dueDate = assignment.due_date ? new Date(assignment.due_date) : null
   const submissionCount = submissions?.length || 0
@@ -59,8 +71,15 @@ export default async function InstructorAssignmentPage({
             ← Back to Dashboard
           </Button>
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900">{assignment.title}</h1>
-        <p className="text-gray-600 mt-2">{assignment.description}</p>
+        <div className="flex justify-between items-start">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">{assignment.title}</h1>
+            <p className="text-gray-600 mt-2">{assignment.description}</p>
+          </div>
+          <Link href={`/instructor/assignments/${id}/edit`}>
+            <Button variant="outline">Edit Assignment</Button>
+          </Link>
+        </div>
       </div>
 
       {/* Assignment Stats */}
@@ -109,7 +128,7 @@ export default async function InstructorAssignmentPage({
                   <div className="flex justify-between items-start">
                     <div>
                       <CardTitle className="text-lg">
-                        {submission.profiles?.full_name || submission.profiles?.email || "Unknown Student"}
+                        {(profilesMap[submission.student_id]?.full_name) || (profilesMap[submission.student_id]?.email) || "Unknown Student"}
                       </CardTitle>
                       <CardDescription>
                         Submitted: {new Date(submission.submitted_at).toLocaleString()}
@@ -165,12 +184,15 @@ export default async function InstructorAssignmentPage({
                       </div>
                     )}
 
-                    {/* View/Grade Button */}
-                    <Link href={`/instructor/submissions/${submission.id}`}>
-                      <Button variant="outline" className="w-full mt-2">
-                        {submission.score !== null ? "View & Edit Grade" : "Grade Submission"}
-                      </Button>
-                    </Link>
+                    {/* Inline Grade Form */}
+                    <InlineGradeForm
+                      submissionId={submission.id}
+                      initialScore={submission.score}
+                      initialFeedback={submission.feedback}
+                      maxScore={assignment.max_score}
+                      assignmentId={assignment.id}
+                      studentName={profilesMap[submission.student_id]?.full_name || profilesMap[submission.student_id]?.email || "Unknown Student"}
+                    />
                   </div>
                 </CardContent>
               </Card>

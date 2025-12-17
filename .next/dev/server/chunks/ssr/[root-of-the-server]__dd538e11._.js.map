@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 18, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/hp/Downloads/DGlobal%20Learning/DGG-Learning-Platform/app/instructor/assignments/page.tsx"],"sourcesContent":["import Link from 'next/link'\r\n\r\nexport default function Page() {\r\n  return (\r\n    <main style={{padding: 24}}>\r\n      <h1 style={{fontSize: 22, fontWeight: 700}}>Instructor — Assignments</h1>\r\n      <p style={{marginTop: 8}}>This is the assignments index for instructors. You can create or manage assignments from here.</p>\r\n\r\n      <div style={{marginTop: 16}}>\r\n        <Link href=\"/instructor/assignments/new\">Create new assignment</Link>\r\n      </div>\r\n    </main>\r\n  )\r\n}\r\n"],"names":[],"mappings":";;;;;AAAA;;;AAEe,SAAS;IACtB,qBACE,8WAAC;QAAK,OAAO;YAAC,SAAS;QAAE;;0BACvB,8WAAC;gBAAG,OAAO;oBAAC,UAAU;oBAAI,YAAY;gBAAG;0BAAG;;;;;;0BAC5C,8WAAC;gBAAE,OAAO;oBAAC,WAAW;gBAAC;0BAAG;;;;;;0BAE1B,8WAAC;gBAAI,OAAO;oBAAC,WAAW;gBAAE;0BACxB,cAAA,8WAAC,0TAAI;oBAAC,MAAK;8BAA8B;;;;;;;;;;;;;;;;;AAIjD"}}]
+}

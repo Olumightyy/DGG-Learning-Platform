@@ -1,0 +1,50 @@
+{
+  "node": {
+    "005a47395ee536050a8af9c1ad30122913224fe862": {
+      "workers": {
+        "app/instructor/submissions/[id]/page": {
+          "moduleId": "[project]/.next-internal/server/app/instructor/submissions/[id]/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/instructor/layout.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/app/actions/update-grade.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "$$RSC_SERVER_ACTION_0",
+          "filename": "app/instructor/layout.tsx"
+        }
+      },
+      "layer": {
+        "app/instructor/submissions/[id]/page": "rsc"
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_0",
+      "filename": "app/instructor/layout.tsx"
+    },
+    "40ce227dc178a25857997797147fbb319da8e69648": {
+      "workers": {
+        "app/instructor/submissions/[id]/page": {
+          "moduleId": "[project]/.next-internal/server/app/instructor/submissions/[id]/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/instructor/layout.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/app/actions/update-grade.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "updateGradeFromForm",
+          "filename": "app/actions/update-grade.ts"
+        }
+      },
+      "layer": {
+        "app/instructor/submissions/[id]/page": "rsc"
+      },
+      "exportedName": "updateGradeFromForm",
+      "filename": "app/actions/update-grade.ts"
+    },
+    "705b6d6dd207389c4188b388d3e4179942d38a4aba": {
+      "workers": {
+        "app/instructor/submissions/[id]/page": {
+          "moduleId": "[project]/.next-internal/server/app/instructor/submissions/[id]/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/instructor/layout.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/app/actions/update-grade.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "updateGrade",
+          "filename": "app/actions/update-grade.ts"
+        }
+      },
+      "layer": {
+        "app/instructor/submissions/[id]/page": "rsc"
+      },
+      "exportedName": "updateGrade",
+      "filename": "app/actions/update-grade.ts"
+    }
+  },
+  "edge": {}
+}

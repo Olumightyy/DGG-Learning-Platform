@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation"
+import { AssignmentResourceUpload } from "@/components/assignment-resource-upload"
 
 interface Material {
   id: string
@@ -21,9 +22,12 @@ export default function NewAssignmentPage() {
   const [maxScore, setMaxScore] = useState("100")
   const [materialId, setMaterialId] = useState("")
   const [materials, setMaterials] = useState<Material[]>([])
+  const [resourceUrl, setResourceUrl] = useState<string | null>(null)
+  const [resourceName, setResourceName] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [loadingMaterials, setLoadingMaterials] = useState(true)
+  const [userId, setUserId] = useState<string | null>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -35,6 +39,8 @@ export default function NewAssignmentPage() {
         } = await supabase.auth.getUser()
 
         if (!user) return
+
+        setUserId(user.id)
 
         const { data, error: fetchError } = await supabase
           .from("materials")
@@ -93,6 +99,8 @@ export default function NewAssignmentPage() {
             description: description.trim(),
             due_date: dueDate ? new Date(dueDate).toISOString() : null,
             max_score: Number.parseInt(maxScore, 10),
+            resource_url: resourceUrl,
+            resource_name: resourceName,
           },
         ])
         .select()
@@ -219,6 +227,19 @@ export default function NewAssignmentPage() {
                 />
               </div>
             </div>
+
+            {/* Assignment Resource Upload */}
+            {userId && (
+              <AssignmentResourceUpload
+                instructorId={userId}
+                currentResourceUrl={resourceUrl}
+                currentResourceName={resourceName}
+                onResourceChange={(url, name) => {
+                  setResourceUrl(url)
+                  setResourceName(name)
+                }}
+              />
+            )}
 
             {error && (
               <div className="p-4 bg-red-50 border border-red-200 rounded-md">

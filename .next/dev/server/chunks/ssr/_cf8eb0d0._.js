@@ -265,14 +265,14 @@ function AssignmentPage() {
                 const timestamp = Date.now();
                 const fileName = `${user.id}/${id}/${timestamp}_${uploadedFile.name}`;
                 // Upload to storage
-                const { data: uploadData, error: uploadError } = await supabase.storage.from("assignments").upload(fileName, uploadedFile);
+                const { data: uploadData, error: uploadError } = await supabase.storage.from("submissions").upload(fileName, uploadedFile);
                 if (uploadError) {
                     console.error("Upload error:", uploadError);
                     throw new Error(`File upload failed: ${uploadError.message}`);
                 }
                 setUploadProgress(60);
                 // Get public URL
-                const { data: { publicUrl } } = supabase.storage.from("assignments").getPublicUrl(fileName);
+                const { data: { publicUrl } } = supabase.storage.from("submissions").getPublicUrl(fileName);
                 finalFileUrl = publicUrl;
                 setUploadProgress(90);
             }
@@ -406,6 +406,55 @@ function AssignmentPage() {
                         fileName: "[project]/app/student/assignments/[id]/page.tsx",
                         lineNumber: 182,
                         columnNumber: 9
+                    }, this),
+                    assignment.resource_url && assignment.resource_name && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "mt-4",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                            href: assignment.resource_url,
+                            target: "_blank",
+                            rel: "noopener noreferrer",
+                            className: "inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                    className: "h-5 w-5",
+                                    fill: "none",
+                                    stroke: "currentColor",
+                                    viewBox: "0 0 24 24",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                        strokeLinecap: "round",
+                                        strokeLinejoin: "round",
+                                        strokeWidth: 2,
+                                        d: "M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/student/assignments/[id]/page.tsx",
+                                        lineNumber: 199,
+                                        columnNumber: 17
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/app/student/assignments/[id]/page.tsx",
+                                    lineNumber: 193,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    children: [
+                                        "Download Assignment Resource: ",
+                                        assignment.resource_name
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/app/student/assignments/[id]/page.tsx",
+                                    lineNumber: 206,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/app/student/assignments/[id]/page.tsx",
+                            lineNumber: 187,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/app/student/assignments/[id]/page.tsx",
+                        lineNumber: 186,
+                        columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
@@ -424,12 +473,12 @@ function AssignmentPage() {
                                     children: "Max Score"
                                 }, void 0, false, {
                                     fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                    lineNumber: 188,
+                                    lineNumber: 215,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                lineNumber: 187,
+                                lineNumber: 214,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -438,18 +487,18 @@ function AssignmentPage() {
                                     children: assignment.max_score || "N/A"
                                 }, void 0, false, {
                                     fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                    lineNumber: 191,
+                                    lineNumber: 218,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                lineNumber: 190,
+                                lineNumber: 217,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                        lineNumber: 186,
+                        lineNumber: 213,
                         columnNumber: 9
                     }, this),
                     dueDate && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -460,12 +509,12 @@ function AssignmentPage() {
                                     children: "Due Date"
                                 }, void 0, false, {
                                     fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                    lineNumber: 197,
+                                    lineNumber: 224,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                lineNumber: 196,
+                                lineNumber: 223,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -475,7 +524,7 @@ function AssignmentPage() {
                                         children: dueDate.toLocaleDateString()
                                     }, void 0, false, {
                                         fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                        lineNumber: 200,
+                                        lineNumber: 227,
                                         columnNumber: 15
                                     }, this),
                                     isOverdue && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -483,19 +532,19 @@ function AssignmentPage() {
                                         children: "Overdue"
                                     }, void 0, false, {
                                         fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                        lineNumber: 203,
+                                        lineNumber: 230,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                lineNumber: 199,
+                                lineNumber: 226,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                        lineNumber: 195,
+                        lineNumber: 222,
                         columnNumber: 11
                     }, this),
                     submission && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -506,12 +555,12 @@ function AssignmentPage() {
                                     children: "Status"
                                 }, void 0, false, {
                                     fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                    lineNumber: 210,
+                                    lineNumber: 237,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                lineNumber: 209,
+                                lineNumber: 236,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -520,24 +569,24 @@ function AssignmentPage() {
                                     children: submission.score !== null ? `${submission.score}/${assignment.max_score}` : "Submitted"
                                 }, void 0, false, {
                                     fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                    lineNumber: 213,
+                                    lineNumber: 240,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                lineNumber: 212,
+                                lineNumber: 239,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                        lineNumber: 208,
+                        lineNumber: 235,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                lineNumber: 185,
+                lineNumber: 212,
                 columnNumber: 7
             }, this),
             submission && submission.feedback && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -548,12 +597,12 @@ function AssignmentPage() {
                             children: "Instructor Feedback"
                         }, void 0, false, {
                             fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                            lineNumber: 224,
+                            lineNumber: 251,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                        lineNumber: 223,
+                        lineNumber: 250,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -562,18 +611,18 @@ function AssignmentPage() {
                             children: submission.feedback
                         }, void 0, false, {
                             fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                            lineNumber: 227,
+                            lineNumber: 254,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                        lineNumber: 226,
+                        lineNumber: 253,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                lineNumber: 222,
+                lineNumber: 249,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
@@ -584,20 +633,20 @@ function AssignmentPage() {
                                 children: "Your Submission"
                             }, void 0, false, {
                                 fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                lineNumber: 234,
+                                lineNumber: 261,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardDescription"], {
                                 children: submission ? "You can update your submission below" : "Submit your work for this assignment"
                             }, void 0, false, {
                                 fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                lineNumber: 235,
+                                lineNumber: 262,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                        lineNumber: 233,
+                        lineNumber: 260,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -616,13 +665,13 @@ function AssignmentPage() {
                                                     children: "*"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                                    lineNumber: 243,
+                                                    lineNumber: 270,
                                                     columnNumber: 63
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                            lineNumber: 242,
+                                            lineNumber: 269,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -634,13 +683,13 @@ function AssignmentPage() {
                                             required: !uploadedFile && !fileUrl
                                         }, void 0, false, {
                                             fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                            lineNumber: 245,
+                                            lineNumber: 272,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                    lineNumber: 241,
+                                    lineNumber: 268,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -650,7 +699,7 @@ function AssignmentPage() {
                                             children: "Upload File (Optional)"
                                         }, void 0, false, {
                                             fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                            lineNumber: 256,
+                                            lineNumber: 283,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -660,7 +709,7 @@ function AssignmentPage() {
                                             accept: ".pdf,.doc,.docx,.txt,.zip,.py,.js,.html,.css,.java,.cpp"
                                         }, void 0, false, {
                                             fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                            lineNumber: 259,
+                                            lineNumber: 286,
                                             columnNumber: 15
                                         }, this),
                                         uploadedFile && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -671,13 +720,13 @@ function AssignmentPage() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                            lineNumber: 266,
+                                            lineNumber: 293,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                    lineNumber: 255,
+                                    lineNumber: 282,
                                     columnNumber: 13
                                 }, this),
                                 fileUrl && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -688,7 +737,7 @@ function AssignmentPage() {
                                             children: "Current file:"
                                         }, void 0, false, {
                                             fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                            lineNumber: 274,
+                                            lineNumber: 301,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -699,13 +748,13 @@ function AssignmentPage() {
                                             children: "View submitted file →"
                                         }, void 0, false, {
                                             fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                            lineNumber: 275,
+                                            lineNumber: 302,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                    lineNumber: 273,
+                                    lineNumber: 300,
                                     columnNumber: 15
                                 }, this),
                                 uploadProgress > 0 && uploadProgress < 100 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -717,12 +766,12 @@ function AssignmentPage() {
                                         }
                                     }, void 0, false, {
                                         fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                        lineNumber: 288,
+                                        lineNumber: 315,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                    lineNumber: 287,
+                                    lineNumber: 314,
                                     columnNumber: 15
                                 }, this),
                                 error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -732,12 +781,12 @@ function AssignmentPage() {
                                         children: error
                                     }, void 0, false, {
                                         fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                        lineNumber: 297,
+                                        lineNumber: 324,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                    lineNumber: 296,
+                                    lineNumber: 323,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$10_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -747,24 +796,24 @@ function AssignmentPage() {
                                     children: isSubmitting ? "Submitting..." : submission ? "Update Submission" : "Submit Assignment"
                                 }, void 0, false, {
                                     fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                                    lineNumber: 301,
+                                    lineNumber: 328,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                            lineNumber: 240,
+                            lineNumber: 267,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                        lineNumber: 239,
+                        lineNumber: 266,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/student/assignments/[id]/page.tsx",
-                lineNumber: 232,
+                lineNumber: 259,
                 columnNumber: 7
             }, this)
         ]
