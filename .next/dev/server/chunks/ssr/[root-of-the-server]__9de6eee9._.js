@@ -524,7 +524,7 @@ async function InstructorAssignmentPage({ params }) {
                                                             target: "_blank",
                                                             rel: "noopener noreferrer",
                                                             className: "text-blue-600 hover:underline text-sm flex items-center gap-1",
-                                                            children: "📎 Download file"
+                                                            children: "📎 Download resource file"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/instructor/assignments/[id]/page.tsx",
                                                             lineNumber: 166,

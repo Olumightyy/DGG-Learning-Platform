@@ -169,7 +169,7 @@ export default async function InstructorAssignmentPage({
                           rel="noopener noreferrer"
                           className="text-blue-600 hover:underline text-sm flex items-center gap-1"
                         >
-                          📎 Download file
+                          📎 Download resource file
                         </a>
                       </div>
                     )}
