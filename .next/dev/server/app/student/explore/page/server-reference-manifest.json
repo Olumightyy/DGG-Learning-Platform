@@ -1,0 +1,20 @@
+{
+  "node": {
+    "00d64e341004fe88a5c8e941a5c5edfb1ede2e467b": {
+      "workers": {
+        "app/student/explore/page": {
+          "moduleId": "[project]/.next-internal/server/app/student/explore/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/student/layout.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "$$RSC_SERVER_ACTION_0",
+          "filename": "app/student/layout.tsx"
+        }
+      },
+      "layer": {
+        "app/student/explore/page": "rsc"
+      },
+      "exportedName": "$$RSC_SERVER_ACTION_0",
+      "filename": "app/student/layout.tsx"
+    }
+  },
+  "edge": {}
+}

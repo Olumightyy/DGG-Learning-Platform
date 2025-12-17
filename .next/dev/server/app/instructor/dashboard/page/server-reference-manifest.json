@@ -3,7 +3,7 @@
     "005a47395ee536050a8af9c1ad30122913224fe862": {
       "workers": {
         "app/instructor/dashboard/page": {
-          "moduleId": "[project]/.next-internal/server/app/instructor/dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/instructor/layout.tsx [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "moduleId": "[project]/.next-internal/server/app/instructor/dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/instructor/layout.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/app/actions/live-sessions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
           "async": false,
           "exportedName": "$$RSC_SERVER_ACTION_0",
           "filename": "app/instructor/layout.tsx"
@@ -14,6 +14,66 @@
       },
       "exportedName": "$$RSC_SERVER_ACTION_0",
       "filename": "app/instructor/layout.tsx"
+    },
+    "408faa8e971f3bdcb2577a85c06c6753864b8c426b": {
+      "workers": {
+        "app/instructor/dashboard/page": {
+          "moduleId": "[project]/.next-internal/server/app/instructor/dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/instructor/layout.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/app/actions/live-sessions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "startLiveSession",
+          "filename": "app/actions/live-sessions.ts"
+        }
+      },
+      "layer": {
+        "app/instructor/dashboard/page": "action-browser"
+      },
+      "exportedName": "startLiveSession",
+      "filename": "app/actions/live-sessions.ts"
+    },
+    "40577c5b2a5be64d140445d2869b6d18d3d9e210ce": {
+      "workers": {
+        "app/instructor/dashboard/page": {
+          "moduleId": "[project]/.next-internal/server/app/instructor/dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/instructor/layout.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/app/actions/live-sessions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "endLiveSession",
+          "filename": "app/actions/live-sessions.ts"
+        }
+      },
+      "layer": {
+        "app/instructor/dashboard/page": "action-browser"
+      },
+      "exportedName": "endLiveSession",
+      "filename": "app/actions/live-sessions.ts"
+    },
+    "405c391125b14c929fb741184016c32406e454c473": {
+      "workers": {
+        "app/instructor/dashboard/page": {
+          "moduleId": "[project]/.next-internal/server/app/instructor/dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/instructor/layout.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/app/actions/live-sessions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "deleteLiveSession",
+          "filename": "app/actions/live-sessions.ts"
+        }
+      },
+      "layer": {
+        "app/instructor/dashboard/page": "action-browser"
+      },
+      "exportedName": "deleteLiveSession",
+      "filename": "app/actions/live-sessions.ts"
+    },
+    "4032045b53548edf7893465ad8529912aaac146e48": {
+      "workers": {
+        "app/instructor/dashboard/page": {
+          "moduleId": "[project]/.next-internal/server/app/instructor/dashboard/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/instructor/layout.tsx [app-rsc] (ecmascript)\", ACTIONS_MODULE1 => \"[project]/app/actions/live-sessions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "createLiveSession",
+          "filename": "app/actions/live-sessions.ts"
+        }
+      },
+      "layer": {
+        "app/instructor/dashboard/page": "action-browser"
+      },
+      "exportedName": "createLiveSession",
+      "filename": "app/actions/live-sessions.ts"
     }
   },
   "edge": {}

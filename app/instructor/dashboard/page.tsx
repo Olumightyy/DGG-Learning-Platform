@@ -2,8 +2,9 @@ import { createClient } from "@/lib/supabase/server"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import LiveClassManager from '@/components/live-class-manager'
 import DeleteAssignmentButton from '@/components/delete-assignment-button'
+import { SessionList } from "@/components/session-list"
+import { CreateSessionForm } from "@/components/create-session-form"
 
 export default async function InstructorDashboard() {
   const supabase = await createClient()
@@ -34,6 +35,23 @@ export default async function InstructorDashboard() {
     .eq("instructor_id", user.id)
     .order("created_at", { ascending: false })
 
+  // Fetch live sessions
+  const { data: liveSessions } = await supabase
+    .from("live_sessions")
+    .select(`
+      id,
+      title,
+      description,
+      meeting_url,
+      scheduled_start,
+      scheduled_end,
+      is_active,
+      materials:material_id ( title )
+    `)
+    .eq("instructor_id", user.id)
+    .gte("scheduled_end", new Date().toISOString())
+    .order("scheduled_start", { ascending: true })
+
   const { count: totalEnrollments } = await supabase
     .from("enrollments")
     .select("id", { count: "exact" })
@@ -61,11 +79,6 @@ export default async function InstructorDashboard() {
           </Link>
         </div>
       </div>
-
-            {/* Live Class Manager */}
-            <div className="mt-4">
-              <LiveClassManager />
-            </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -101,6 +114,21 @@ export default async function InstructorDashboard() {
             <p className="text-3xl font-bold text-[#a16f00]">{pendingCount || 0}</p>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Live Sessions Section */}
+      <div>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-[#512d7c]">Live Sessions</h2>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-1">
+            <CreateSessionForm />
+          </div>
+          <div className="lg:col-span-2">
+            <SessionList sessions={liveSessions || []} />
+          </div>
+        </div>
       </div>
 
       {/* Quick Actions */}

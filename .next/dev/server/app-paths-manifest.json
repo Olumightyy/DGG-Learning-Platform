@@ -2,10 +2,13 @@
   "/_not-found/page": "app/_not-found/page.js",
   "/api/live-class/route": "app/api/live-class/route.js",
   "/auth/login/page": "app/auth/login/page.js",
+  "/auth/sign-up/page": "app/auth/sign-up/page.js",
   "/instructor/assignments/[id]/page": "app/instructor/assignments/[id]/page.js",
   "/instructor/assignments/new/page": "app/instructor/assignments/new/page.js",
   "/instructor/dashboard/page": "app/instructor/dashboard/page.js",
+  "/instructor/materials/page": "app/instructor/materials/page.js",
   "/page": "app/page.js",
   "/student/assignments/[id]/page": "app/student/assignments/[id]/page.js",
-  "/student/dashboard/page": "app/student/dashboard/page.js"
+  "/student/dashboard/page": "app/student/dashboard/page.js",
+  "/student/explore/page": "app/student/explore/page.js"
 }

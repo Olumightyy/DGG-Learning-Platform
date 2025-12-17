@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import JoinLiveButton from '@/components/join-live-button'
+import { UpcomingSessions } from "@/components/upcoming-sessions"
 
 export default async function StudentDashboard() {
   const supabase = await createClient()
@@ -72,6 +73,25 @@ export default async function StudentDashboard() {
 
   const submissionMap = new Map(submissions?.map((s) => [s.assignment_id, s]) || [])
 
+  // Fetch upcoming live sessions for enrolled courses
+  const { data: liveSessions } = await supabase
+    .from("live_sessions")
+    .select(`
+      id,
+      title,
+      description,
+      meeting_url,
+      scheduled_start,
+      scheduled_end,
+      is_active,
+      material_id,
+      materials:material_id ( title )
+    `)
+    .in("material_id", enrolledMaterialIds.length > 0 ? enrolledMaterialIds : ['00000000-0000-0000-0000-000000000000'])
+    .gte("scheduled_end", new Date().toISOString())
+    .order("scheduled_start", { ascending: true })
+    .limit(10)
+
   return (
     <div className="space-y-8">
       <div>
@@ -79,10 +99,8 @@ export default async function StudentDashboard() {
         <p className="text-gray-600 mt-2">Manage your learning materials and assignments</p>
       </div>
 
-      {/* Join Live Class */}
-      <div className="mt-4">
-        <JoinLiveButton />
-      </div>
+      {/* Upcoming Live Sessions */}
+      <UpcomingSessions sessions={liveSessions || []} />
 
       {/* Enrolled Materials */}
       <div>
